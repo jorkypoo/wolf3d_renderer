@@ -1,0 +1,7 @@
+transferring an older raycaster project into C++ to hopefully be a fully fledged game
+i plan for it to be modular with a custom map maker
+no idea what the genre/theme of the game will be - that'll come later
+
+credits:
+stb_image.h and stb_image_resize2.h provided by: https://github.com/nothings/stb/tree/master
+tutorial i followed to setup the basics of the software renderer: https://lodev.org/cgtutor/raycasting.html
