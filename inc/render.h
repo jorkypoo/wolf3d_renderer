@@ -20,7 +20,7 @@ inline void fill_point(Color* buff, size_t x, size_t y, Color c) {
 
 // fill line from y1 - y2 with colour
 inline void fill_vertline(Color* buff, size_t x, size_t y1, size_t y2, Color c) {
-  for (int y = y1; y < y2; y++)
+  for (size_t y = y1; y < y2; y++)
     fill_point(buff, x, y, c);
 }
 

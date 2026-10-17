@@ -1,3 +1,7 @@
+// some functions start chucking warnings with -Wall cpiler flag
+// and i want it to SHUT UPPPP!!!!!
+#define SHUT_GCC_UP
+
 /* stb_image - v2.30 - public domain image loader - http://nothings.org/stb
                                   no warranty implied; use at your own risk
 
@@ -1066,6 +1070,9 @@ static void *stbi__malloc_mad4(int a, int b, int c, int d, int add)
 }
 #endif
 
+
+#ifndef SHUT_GCC_UP
+
 // returns 1 if the sum of two signed ints is valid (between -2^31 and 2^31-1 inclusive), 0 on overflow.
 static int stbi__addints_valid(int a, int b)
 {
@@ -1073,6 +1080,7 @@ static int stbi__addints_valid(int a, int b)
    if (a < 0 && b < 0) return a >= INT_MIN - b; // same as a + b >= INT_MIN; INT_MIN - b cannot overflow since b < 0.
    return a <= INT_MAX - b;
 }
+
 
 // returns 1 if the product of two ints fits in a signed short, 0 on overflow.
 static int stbi__mul2shorts_valid(int a, int b)
@@ -1082,6 +1090,8 @@ static int stbi__mul2shorts_valid(int a, int b)
    if (b < 0) return a <= SHRT_MIN / b; // same as a * b >= SHRT_MIN
    return a >= SHRT_MIN / b;
 }
+
+#endif
 
 // stbi__err - error
 // stbi__errpf - error returning pointer to float
