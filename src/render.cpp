@@ -10,6 +10,8 @@ void  end_rendering(Game_Manager* Game);
 void Render(Game_Manager* Game) {
   init_rendering(Game);
 
+  double zbuff[PIXELX] = {0};
+
   /* wall casting */
   for (int x = 0; x < PIXELX; x++) {
     // x coord that intercepts with the plane
@@ -17,12 +19,12 @@ void Render(Game_Manager* Game) {
 
     // ray direction for this column shot from player position
     v2 ray = {
-      Game->player.get_dirx() + Game->player.get_planex() * camera_x,
-      Game->player.get_diry() + Game->player.get_planey() * camera_x
+      Game->player->get_dirx() + Game->player->get_planex() * camera_x,
+      Game->player->get_diry() + Game->player->get_planey() * camera_x
     };
 
     // integer coords for where the player is on the map
-    v2i map_pos = { (int) Game->player.get_posx(), (int) Game->player.get_posy() };
+    v2i map_pos = { (int) Game->player->get_posx(), (int) Game->player->get_posy() };
 
     v2 delta_dist = {
       fabs(ray.x) < 1e-30 ? 1e30 : fabs(1 / ray.x),
@@ -30,8 +32,8 @@ void Render(Game_Manager* Game) {
     };
 
     v2 side_dist = {
-      (ray.x < 0 ? Game->player.get_posx() - map_pos.x : map_pos.x + 1.0 - Game->player.get_posx()) * delta_dist.x,
-      (ray.y < 0 ? Game->player.get_posy() - map_pos.y : map_pos.y + 1.0 - Game->player.get_posy()) * delta_dist.y,
+      (ray.x < 0 ? Game->player->get_posx() - map_pos.x : map_pos.x + 1.0 - Game->player->get_posx()) * delta_dist.x,
+      (ray.y < 0 ? Game->player->get_posy() - map_pos.y : map_pos.y + 1.0 - Game->player->get_posy()) * delta_dist.y,
     };
 
     v2i step = { (int) sign(ray.x), (int) sign(ray.y) };
@@ -90,8 +92,8 @@ void Render(Game_Manager* Game) {
     // exact x value of where the wall was hit
     /*double wall_x = (side == 0 ? player.pos.y : player.pos.x) + dist * (side == 0 ? ray.y : ray.x);*/
     double wall_x = 0;
-    if (side == 0) wall_x = Game->player.get_posy() + perp_dist * ray.y;
-    else           wall_x = Game->player.get_posx() + perp_dist * ray.x;
+    if (side == 0) wall_x = Game->player->get_posy() + perp_dist * ray.y;
+    else           wall_x = Game->player->get_posx() + perp_dist * ray.x;
     wall_x -= floor(wall_x);
     
     // x coordinate on the texture
@@ -143,7 +145,7 @@ void Render(Game_Manager* Game) {
       c = 0xFF000000 | (br & 0xFF00FF) | (g & 0x00FF00);
     }
 
-    // zbuff[x] = perp_dist;
+    zbuff[x] = perp_dist;
 
     fill_vertline(Game->buffer, x, 0, wall_top, 0xFF003FCF);
     fill_vertline(Game->buffer, x, wall_btm, PIXELY, 0xFFCFCFCF);
@@ -166,7 +168,7 @@ void end_rendering(Game_Manager* Game) {
 
   // /*
   char fps[64];
-  snprintf(fps, 64, "%lu", Game->get_fps());
+  snprintf(fps, 64, "%Lf", Game->get_fps());
   SDL_SetRenderDrawColor(Game->renderer, 0, 255, 0, 255);
   SDL_RenderDebugText(Game->renderer, 0.0f, 0.0f, fps);
   // */

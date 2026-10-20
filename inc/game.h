@@ -21,6 +21,8 @@ using namespace std;
 #include "def.h"
 #include "mathutils.h"
 
+#include "map.h"
+
 
 // ill use this later
 int Init_Game();
@@ -58,6 +60,8 @@ class Player {
     double collision_radius;
 
     // move penalty and stuff too!
+
+
   public:
     Player() {
       pos = {0,0};
@@ -103,6 +107,7 @@ class Player {
     void rotate(double rot) {
       const v2 od = dir;
       const v2 op = plane;
+
       dir.x = od.x * cos(rot) - od.y * sin(rot);
       dir.y = od.x * sin(rot) + od.y * cos(rot);
       plane.x = op.x * cos(rot) - op.y * sin(rot);
@@ -111,20 +116,20 @@ class Player {
 
     void move(double mov) {
       v2 tomov = { dir.x * mov, dir.y * mov };
-
+      
       int next_x = (int) (pos.x + tomov.x + sign(tomov.x) * collision_radius);
       int cur_y  = (int) pos.y;
 
       // this function must have access to the global gamemap (which it will)
       // so it can check
 
-      // if (GAMEMAP[cur_y * MAPX + next_x] == 0)
+      if (GAMEMAP[cur_y * MAPX + next_x].is_air)
         pos.x += tomov.x;
 
       int cur_x  = (int) pos.x;
       int next_y = (int) (pos.y + tomov.y + sign(tomov.y) * collision_radius);
 
-      // if (GAMEMAP[next_y * MAPX + cur_x] == 0)
+      if (GAMEMAP[next_y * MAPX + cur_x].is_air)
         pos.y += tomov.y;
     }
 };
@@ -138,8 +143,9 @@ class Game_Manager {
     int borderless;
 
     // FPS variables
-    Uint64 delta;
-    Uint64 fps;
+    long double delta;
+    long double fps;
+
     Uint64 frame_old;
     Uint64 frame_new;
     Uint64 frame_cnt;
@@ -151,11 +157,11 @@ class Game_Manager {
     SDL_Texture* texture;
 
     // attached game structures
-    Player player;
+    Player* player;
     Color buffer[PIXELX * PIXELY];
 
 
-    Game_Manager(Player p) {
+    Game_Manager(Player* p) {
       window   = nullptr;
       renderer = nullptr;
       texture  = nullptr;
@@ -216,7 +222,7 @@ class Game_Manager {
       static Uint64 last_fps_update = 0;
       frame_old = frame_new;
       frame_new = SDL_GetTicksNS();
-      delta = (double) (frame_new - frame_old) / NS_PER_SECOND;
+      delta = (long double) (frame_new - frame_old) / NS_PER_SECOND;
 
       frame_cnt++;
       if (frame_old - last_fps_update >= NS_PER_SECOND) {
@@ -232,10 +238,10 @@ class Game_Manager {
     int  is_borderless()              { return borderless; }
     void set_window_borderless(int s) { borderless = s; }
 
-    Uint64 get_fps()         { return fps; }
+    long double get_fps()         { return fps; }
     void   set_fps(Uint64 f) { fps = f; }
 
-    Uint64 get_delta()         { return delta; }
+    long double get_delta()         { return delta; }
     void   set_delta(Uint64 d) { delta = d; }
 };
 

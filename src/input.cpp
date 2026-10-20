@@ -36,15 +36,15 @@ void Input(Game_Manager* Game) {
   const bool* ks = SDL_GetKeyboardState(NULL);
   // moving players dir
   if (ks[SDL_SCANCODE_RIGHT])
-    Game->player.rotate(-rotspeed);
+    Game->player->rotate(-rotspeed);
   if (ks[SDL_SCANCODE_LEFT])
-    Game->player.rotate(+rotspeed);
+    Game->player->rotate(+rotspeed);
 
   // moving players position
   if (ks[SDL_SCANCODE_UP]) 
-    Game->player.move(movspeed);
+    Game->player->move(movspeed);
   if (ks[SDL_SCANCODE_DOWN]) 
-    Game->player.move(-movspeed * mov_penalty);
+    Game->player->move(-movspeed * mov_penalty);
   
 
   // shooting and menu stuff
