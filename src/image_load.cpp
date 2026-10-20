@@ -28,7 +28,7 @@ void provide_missing_texture(unsigned* buff, int w, int h) {
 
 // basically, stb_image only allows for image dimensions of whatever the
 // signed integer max is, so don't worry that it's not size_t, shhh
-void load_image_to_buff(char* path, unsigned* buff, int w, int h) {
+void load_image_to_buff(const char* path, unsigned* buff, int w, int h) {
   // query the image to get it's dimensions and see if it can be
   // processed by stbi; if not, provide a default texture, lol
   int qw = 0; int qh = 0; int qc = 0;

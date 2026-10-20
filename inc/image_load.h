@@ -15,6 +15,6 @@ using namespace std;
 // load image data from path into buff, where buff is definitely of size w*h
 // automatically resizes image if it does not match buff size
 // the only image types supported are .png and .bmp
-void load_image_to_buff(char* path, Color* buff, int w, int h);
+void load_image_to_buff(const char* path, Color* buff, int w, int h);
 
 #endif

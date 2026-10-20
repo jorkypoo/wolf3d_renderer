@@ -36,11 +36,11 @@ class Game_Manager;
 // Tile GameMap;
 
 // this shall be an unordered map - check later
-extern Color Textures;
+// extern Color Textures;
 
 // same as before
-extern Color Fog_Map;
-extern Color Dark_Map;
+// extern Color Fog_Map;
+// extern Color Dark_Map;
 
 // list of all sprites, animated or not - static objects around the gamemap
 // Sprite Sprites;
@@ -74,6 +74,31 @@ class Player {
 
       collision_radius = 0.2;
     }
+
+    void set_spawn_point(double x, double y) {
+      pos.x = x;
+      pos.y = y;
+      dir = { -1.0, 0.0 };
+      // plane = { 0.0, 0.7 };
+    }
+
+    double get_posx() { return pos.x; }
+    double get_posy() { return pos.y; }
+
+    v2 get_pos() { return pos; }
+
+    double get_dirx() { return dir.x; }
+    double get_diry() { return dir.y; }
+
+    v2 get_dir() { return dir; }
+
+    double get_planex() { return plane.x; }
+    double get_planey() { return plane.y; }
+
+    v2 get_plane() { return plane; }
+
+    double get_collision_radius() { return collision_radius; }
+
 
     void rotate(double rot) {
       const v2 od = dir;

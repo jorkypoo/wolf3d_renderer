@@ -2,6 +2,9 @@
 #define __MATH_UTILS__
 
 #include <math.h>
+#include <algorithm>
+using std::max;
+using std::min;
 
 typedef struct v2 v2;
 struct v2 { double x; double y; };
@@ -12,8 +15,8 @@ struct v2i { int x; int y; };
 #define SQ(a) (a*a)
 #define CUBE(a) (a*a*a)
 
-#define max(a, b) ({ typeof(a) __a = a; typeof(b) __b = b; __a > __b ? __a : __b; })
-#define min(a, b) ({ typeof(a) __a = a; typeof(b) __b = b; __a < __b ? __a : __b; })
+// #define max(a, b) ({ typeof(a) __a = a; typeof(b) __b = b; __a > __b ? __a : __b; })
+// #define min(a, b) ({ typeof(a) __a = a; typeof(b) __b = b; __a < __b ? __a : __b; })
 
 #define sign(a) ({ typeof(a) __a = a; __a > 0 ? 1 : -1; })
 

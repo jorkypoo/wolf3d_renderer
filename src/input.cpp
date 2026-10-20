@@ -32,33 +32,29 @@ void Input(Game_Manager* Game) {
 
   /* keyboard input */
 
-  /*
 
   const bool* ks = SDL_GetKeyboardState(NULL);
   // moving players dir
   if (ks[SDL_SCANCODE_RIGHT])
-    Game.Player.rotate(-rotspeed);
+    Game->player.rotate(-rotspeed);
   if (ks[SDL_SCANCODE_LEFT])
-    rotate(+rotspeed);
+    Game->player.rotate(+rotspeed);
 
   // moving players position
   if (ks[SDL_SCANCODE_UP]) 
-    move(movspeed);
+    Game->player.move(movspeed);
   if (ks[SDL_SCANCODE_DOWN]) 
-    move(-movspeed * mov_penalty);
+    Game->player.move(-movspeed * mov_penalty);
   
 
   // shooting and menu stuff
   if (ks[SDL_SCANCODE_Z]) {
-    righthand.update = 1;
+    ;
   }
   if (ks[SDL_SCANCODE_X]) {
-    righthand.tex_equipped = testing_weapon;
-    righthand.num_frames = 1;
+    ;
   }
   if (ks[SDL_SCANCODE_C]) {
-    righthand.tex_equipped = righthand_tex;
-    righthand.num_frames = 4;
+    ;
   }
-  */
 }

@@ -22,4 +22,13 @@ inline void fill_vertline(Color* buff, size_t x, size_t y1, size_t y2, Color c) 
     fill_point(buff, x, y, c);
 }
 
+// draw texture of size w*h to buffer at x,y - assumes buff is large enough
+inline void draw_texture(Color* buff, size_t bw, size_t x, size_t y, Color* tex, size_t w, size_t h) {
+  size_t ox = x;
+  for (size_t ty = 0; y <= h-1; ty++, y++, x=ox)
+  for (size_t tx = 0; x <= w-1; tx++, x++)
+    if ((tex[w * ty + tx] & 0xFF000000) == 0xFF000000)
+      buff[bw * y + x] = tex[w * ty + tx];
+}
+
 #endif
