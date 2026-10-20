@@ -108,17 +108,9 @@ class Player {
 // class to help me manage game/sdl shit
 class Game_Manager {
   private:
-    // windowing variables
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    SDL_Texture* texture;
-
-    // game related variables
-    Player player;
-    Color* buffer;
-
     // game state variables
     int running;
+    int borderless;
 
     // FPS variables
     Uint64 delta;
@@ -128,6 +120,16 @@ class Game_Manager {
     Uint64 frame_cnt;
     
   public:
+    // windowing variables
+    SDL_Window* window;
+    SDL_Renderer* renderer;
+    SDL_Texture* texture;
+
+    // attached game structures
+    Player player;
+    Color buffer[PIXELX * PIXELY];
+
+
     Game_Manager(Player p) {
       window   = nullptr;
       renderer = nullptr;
@@ -135,6 +137,7 @@ class Game_Manager {
 
       // set running to true once window and whatnot is set up
       running = 0;
+      borderless = 0;
 
       frame_old = 0;
       frame_new = 0;
@@ -158,21 +161,21 @@ class Game_Manager {
 
       window = SDL_CreateWindow(window_name, window_w, window_h, 0);
       if (!window) {
-        cout << "Error: Failed to create window: %s\n", SDL_GetError();
+        cout << "Error: Failed to create window: " << SDL_GetError() << "\n";
         return 0;
       }
 
       renderer = SDL_CreateRenderer(window, NULL);
       if (!renderer) {
-        cout << "Error: Failed to create renderer: %s\n", SDL_GetError();
+        cout << "Error: Failed to create renderer: " << SDL_GetError() << "\n";
         return 0;
       }
       
       SDL_SetRenderLogicalPresentation(renderer, window_w, window_h, SDL_LOGICAL_PRESENTATION_LETTERBOX);
 
       texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, tex_w, tex_h);
-      if (texture) {
-        cout << "Error: Failed to create game texture: %s\n", SDL_GetError();
+      if (!texture) {
+        cout << "Error: Failed to create game texture: " << SDL_GetError() << "\n";
         return 0;
       }
       
@@ -198,11 +201,17 @@ class Game_Manager {
       }
     }
 
-    int is_running() { return running; }
+    int  is_running()             { return running; }
+    void set_running_state(int s) { running = s; }
 
-    Uint64 get_fps() { return fps; }
+    int  is_borderless()              { return borderless; }
+    void set_window_borderless(int s) { borderless = s; }
 
-    Uint64 get_delta() { return delta; }
+    Uint64 get_fps()         { return fps; }
+    void   set_fps(Uint64 f) { fps = f; }
+
+    Uint64 get_delta()         { return delta; }
+    void   set_delta(Uint64 d) { delta = d; }
 };
 
 #endif

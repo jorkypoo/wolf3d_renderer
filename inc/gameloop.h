@@ -11,8 +11,8 @@
 
 #include "game.h"
 
-void Input(Game_Manager Game);
-void Update(Game_Manager Game);
-void Render(Game_Manager Game);
+void Input(Game_Manager* Game);
+void Update(Game_Manager* Game);
+void Render(Game_Manager* Game);
 
 #endif

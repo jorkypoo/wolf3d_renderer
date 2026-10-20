@@ -1,5 +1,5 @@
 #include "../inc/gameloop.h"
 
-void Update(Game_Manager Game) {
+void Update(Game_Manager* Game) {
   ;
 }

@@ -12,14 +12,17 @@ Game_Manager Game(Player);
 
 
 int main(int argv, char** argc) {
-  Game.Init(WINDOWNAME, WINDOWX, WINDOWY, PIXELX, PIXELY);
+  if(!Game.Init(WINDOWNAME, WINDOWX, WINDOWY, PIXELX, PIXELY))
+    cout << "erm oh well\n";
 
   // images are to be loaded into the global texture buffer here
 
   while (Game.is_running()) {
-    Input(Game);
-    Update(Game);
-    Render(Game);
+    Input(&Game);
+    // Update(&Game);
+    Render(&Game);
+    // Game.set_running_state(0);
+    Game.calculate_fps();
   }
 
   return 0;
