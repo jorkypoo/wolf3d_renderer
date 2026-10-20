@@ -1,5 +1,12 @@
 /*
- * helps out with managing SDL and window shit
+ * header to provide:
+ * the game structure & player,
+ * texture structure (the raw image data),
+ * the global gamemap & fogmaps/darkmaps, 
+ * sprite list (animated & not - theyll use the same class),
+ * npc/enemy list - theyre separate to sprites
+ *
+ * stuff like rendering and input & updates will draw from this during execution
  *
  */
 
@@ -11,16 +18,109 @@
 #include <iostream>
 using namespace std;
 
+#include "def.h"
+#include "mathutils.h"
+
+
+// ill use this later
+int Init_Game();
+
+
+// player shall be a child of the game structure for easy access
+// when passing it around
+class Player;
+class Game_Manager;
+
+// global gamemap that is populated with each levels own configuration
+// made up of tiles, each having their own attached textures & unique properties
+// Tile GameMap;
+
+// this shall be an unordered map - check later
+extern Color Textures;
+
+// same as before
+extern Color Fog_Map;
+extern Color Dark_Map;
+
+// list of all sprites, animated or not - static objects around the gamemap
+// Sprite Sprites;
+
+// list of all npcs/enemies - they will need to be updated during the gameloop
+// Entity Entities;
+
+
+class Player {
+  private:
+    v2 pos;
+    v2 dir;
+    v2 plane;
+
+    double collision_radius;
+
+    // move penalty and stuff too!
+  public:
+    Player() {
+      pos = {0,0};
+      dir = {-1,0};
+      plane = {0,0.7};
+
+      collision_radius = 0.2;
+    }
+    
+    Player(double fov) {
+      pos = {0,0};
+      dir = {-1,0};
+      plane = {0,fov};
+
+      collision_radius = 0.2;
+    }
+
+    void rotate(double rot) {
+      const v2 od = dir;
+      const v2 op = plane;
+      dir.x = od.x * cos(rot) - od.y * sin(rot);
+      dir.y = od.x * sin(rot) + od.y * cos(rot);
+      plane.x = op.x * cos(rot) - op.y * sin(rot);
+      plane.y = op.x * sin(rot) + op.y * cos(rot);
+    }
+
+    void move(double mov) {
+      v2 tomov = { dir.x * mov, dir.y * mov };
+
+      int next_x = (int) (pos.x + tomov.x + sign(tomov.x) * collision_radius);
+      int cur_y  = (int) pos.y;
+
+      // this function must have access to the global gamemap (which it will)
+      // so it can check
+
+      // if (GAMEMAP[cur_y * MAPX + next_x] == 0)
+        pos.x += tomov.x;
+
+      int cur_x  = (int) pos.x;
+      int next_y = (int) (pos.y + tomov.y + sign(tomov.y) * collision_radius);
+
+      // if (GAMEMAP[next_y * MAPX + cur_x] == 0)
+        pos.y += tomov.y;
+    }
+};
+
 
 // class to help me manage game/sdl shit
 class Game_Manager {
   private:
+    // windowing variables
     SDL_Window* window;
     SDL_Renderer* renderer;
     SDL_Texture* texture;
 
+    // game related variables
+    Player player;
+    Color* buffer;
+
+    // game state variables
     int running;
 
+    // FPS variables
     Uint64 delta;
     Uint64 fps;
     Uint64 frame_old;
@@ -28,7 +128,7 @@ class Game_Manager {
     Uint64 frame_cnt;
     
   public:
-    Game_Manager() {
+    Game_Manager(Player p) {
       window   = nullptr;
       renderer = nullptr;
       texture  = nullptr;
@@ -39,6 +139,8 @@ class Game_Manager {
       frame_old = 0;
       frame_new = 0;
       frame_cnt = 0;
+
+      player = p;
     }
 
     ~Game_Manager() {

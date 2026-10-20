@@ -7,12 +7,13 @@
 #ifndef _DEFINITIONS_
 #define _DEFINITIONS_
 
-#define WINDOWNAME  "Wolf3D Demo"
 #define WINDOWX     (960)
 #define WINDOWY     (540)
 #define PIXELSCALE  (2)
 #define PIXELX      (320*PIXELSCALE)
 #define PIXELY      (180*PIXELSCALE)
+#define MAPX        (24)
+#define MAPY        (24)
 #define TEXSIZE     (64)
 #define OBJSIZE     (128)
 #define EQSIZE      (90)
