@@ -1,0 +1,3 @@
+a few things RE FLOOR_RENDERING in render.cpp must be filled out; specifically, the
+game must provide a ceiling/floor colour for each level, or a default if none was provided
+this mostly depends on how levels are structured

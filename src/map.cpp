@@ -14,7 +14,7 @@ unordered_map<string, Tile> tiles;
 int Init_Tiles(void) {
   Tile air = {1, "air"};
   Tile blk = {0, "assets/redbrick.png"};
-  Tile wod = {2, "assets/wood.png"};
+  Tile wod = {0, "assets/wood.png"};
   tiles[air.lookup_name] = air;
   tiles[blk.lookup_name] = blk;
   tiles[wod.lookup_name] = wod;

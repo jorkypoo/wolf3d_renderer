@@ -20,7 +20,7 @@ int main(int argv, char** argc) {
   Game.player->set_spawn_point(3, 2);
 
   // images are to be loaded into the global texture buffer here
-  Init_Textures();
+  Init_Global_Textures();
   Init_Map();
   // print_map();
   
@@ -29,9 +29,6 @@ int main(int argv, char** argc) {
     Input(&Game);
     // Update(&Game);
     Render(&Game);
-    // cout << Game.player.get_posx() << "," << Game.player.get_posy() << "\t";
-    // cout << Game.player.get_dirx() << "," << Game.player.get_diry() << "\t";
-    // Game.set_running_state(0);
     Game.calculate_fps();
   }
 

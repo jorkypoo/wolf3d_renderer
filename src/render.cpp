@@ -1,16 +1,118 @@
 #include "../inc/gameloop.h"
 #include "../inc/draw.h"
-
 #include "../inc/textures.h"
 #include "../inc/map.h"
 
+// macros now, and can later be put as settings
+// no idea if these can be hotswitched
+#define FLOOR_RENDERING
+#define FOG_RENDERING
+#define SPRITE_RENDERING
+#define PRINT_FPS
+
+
+inline Color add_fog_to_color(Color (*fgmp)[FOGLEVELS][256], Color input_color, unsigned fog_amount) {
+  unsigned char* color_components = (unsigned char*) &input_color;
+  
+  color_components[2] = (fgmp[FM_RED]  [fog_amount][color_components[2]]); 
+  color_components[1] = (fgmp[FM_GREEN][fog_amount][color_components[1]]);
+  color_components[0] = (fgmp[FM_BLUE] [fog_amount][color_components[0]]);
+
+  return input_color;
+}
+
 void init_rendering(Game_Manager* Game);
 void  end_rendering(Game_Manager* Game);
+
 
 void Render(Game_Manager* Game) {
   init_rendering(Game);
 
   double zbuff[PIXELX] = {0};
+
+  #ifdef FLOOR_RENDERING
+
+  /* floor casting */
+  { // this block is cheeky but removes the textures below from scope after were done w them
+
+  // grab these from the level like:
+  // Game->level/dungeon.get_floor_/ceiling_texture()
+  Color* floor_tex = TEXTURES["assets/colorstone.png"];  
+  Color*  ceil_tex = TEXTURES["assets/wood.png"];
+  // Color* tex_for_col = TEXTURES[tile_for_col.lookup_name];
+
+  for(int y = 0; y < PIXELY; y++) {
+    // rayDir for leftmost ray (x = 0) and rightmost ray (x = w)
+    v2 raydir0 = { Game->player->get_dirx() - Game->player->get_planex(), Game->player->get_diry() - Game->player->get_planey() };
+    v2 raydir1 = { Game->player->get_dirx() + Game->player->get_planex(), Game->player->get_diry() + Game->player->get_planey() };
+
+    // Current y position compared to the center of the screen (the horizon)
+    int p = y - PIXELY / 2;
+
+    // Vertical position of the camera.
+    float posz = 0.5 * PIXELY;
+
+    // Horizontal distance from the camera to the floor for the current row.
+    // 0.5 is the z position exactly in the middle between floor and ceiling.
+    float row_dist = posz / p;
+
+    // calculate the real world step vector we have to add for each x (parallel to camera plane)
+    // adding step by step avoids multiplications with a weight in the inner loop
+    v2 floor_step = {
+      row_dist * (raydir1.x - raydir0.x) / PIXELX,
+      row_dist * (raydir1.y - raydir0.y) / PIXELX
+    };
+
+    // real world coordinates of the leftmost column. This will be updated as we step to the right.
+    v2 floor = {
+      Game->player->get_posx() + row_dist * raydir0.x,
+      Game->player->get_posy() + row_dist * raydir0.y
+    };
+
+    #ifdef FOG_RENDERING
+    // calculate fog levels for each column
+    const float middle = ((float) PIXELY / 2);
+    unsigned f_fog = ((1 - ((y / middle) - 1)) * FOGLEVELS);
+    unsigned c_fog = (((PIXELY - y - 1) / middle) * FOGLEVELS);
+
+    if (f_fog >= FOGLEVELS) f_fog = FOGLEVELS-1;
+    if (c_fog >= FOGLEVELS) c_fog = FOGLEVELS-1;
+    #endif
+
+    for(int x = 0; x < PIXELX; ++x) {
+      // the cell coord is simply got from the integer parts of floorX and floorY
+      v2i cell = { (int) (floor.x), (int) (floor.y) };
+
+      // get the texture coordinate from the fractional part
+      int tx = (int) (TEXSIZE * (floor.x - cell.x)) & (TEXSIZE - 1);
+      int ty = (int) (TEXSIZE * (floor.y - cell.y)) & (TEXSIZE - 1);
+
+      floor.x += floor_step.x;
+      floor.y += floor_step.y;
+
+      // choose texture and draw the pixel
+      Color c = 0;
+      
+      // floor
+      c = floor_tex[TEXSIZE * ty + tx];
+      #ifdef FOG_RENDERING
+      c = add_fog_to_color(FOGMAP, c, f_fog);
+      #endif
+      fill_point(Game->buffer, x, y, c);
+
+      //ceiling (symmetrical, at screenHeight - y - 1 instead of y)
+      c = ceil_tex[TEXSIZE * ty + tx];
+      #ifdef FOG_RENDERING
+      c = add_fog_to_color(FOGMAP, c, c_fog);
+      #endif
+      fill_point(Game->buffer, x, PIXELY - y - 1, c);
+    } // loop to fill buff
+  }   // loop through every row in screen
+
+  } // this extra block removes the floor & ceiling texture from scope
+
+  #endif // FLOOR_RENDERING
+
 
   /* wall casting */
   for (int x = 0; x < PIXELX; x++) {
@@ -84,10 +186,11 @@ void Render(Game_Manager* Game) {
     // 
     // this structure is defined in map.h & contains
     // the texture hash map lookup name 
-    Tile tile_for_col = {0, 0};
+    Tile tile_for_col = GAMEMAP[MAPX * map_pos.y + map_pos.x];
 
-    // used as an index for the textures array - check the GAMEMAP
-    tile_for_col = GAMEMAP[MAPX * map_pos.y + map_pos.x];
+    // instead of querying the hashmap every pixel, query it every column
+    // grab the texture for the column for array lookups every pixel
+    Color* tex_for_col = TEXTURES[tile_for_col.lookup_name];
 
     // exact x value of where the wall was hit
     /*double wall_x = (side == 0 ? player.pos.y : player.pos.x) + dist * (side == 0 ? ray.y : ray.x);*/
@@ -108,9 +211,8 @@ void Render(Game_Manager* Game) {
     // fog added to colour is proportional to the distance to
     // the pixel - further away a block is, the greater the fog effect
     // fog_dist is kinda the cutoff dist where only fog is rendered
-    unsigned fog_amt = (perp_dist / FOGDIST) * FOG_LEVELS;
-    if (fog_amt >= FOG_LEVELS) fog_amt = FOG_LEVELS-1;
-    if (fog_amt < 0) fog_amt = 0;
+    unsigned fog_amt = (perp_dist / FOGDIST) * FOGLEVELS;
+    if (fog_amt >= FOGLEVELS) fog_amt = FOGLEVELS-1;
     #endif
 
     // when texture mapping, the pixels must be drawn at once, as their
@@ -121,7 +223,7 @@ void Render(Game_Manager* Game) {
       tex_pos += tex_step;
 
       // original colour from the texure
-      c = TEXTURES[tile_for_col.lookup_name][TEXSIZE * tex_y + tex_x];
+      c = tex_for_col[TEXSIZE * tex_y + tex_x];
 
       // darken colour on specific sides to add a shadow effect/depth
       if (side == 1) {
@@ -132,7 +234,7 @@ void Render(Game_Manager* Game) {
       }
 
       #ifdef FOG_RENDERING
-      c = add_fog_to_color(fogmap, c, fog_amt);
+      c = add_fog_to_color(FOGMAP, c, fog_amt);
       #endif
       
       fill_point(Game->buffer, x, y, c);
@@ -147,8 +249,15 @@ void Render(Game_Manager* Game) {
 
     zbuff[x] = perp_dist;
 
-    fill_vertline(Game->buffer, x, 0, wall_top, 0xFF003FCF);
-    fill_vertline(Game->buffer, x, wall_btm, PIXELY, 0xFFCFCFCF);
+    #ifndef FLOOR_RENDERING
+    // collect the provided floor/ceiling colour from the current level
+    // ill hardcode this for now
+    Color full_ceil_color = 0xFF003FCF;
+    Color full_floor_color = 0xFFCFCFCF;
+
+    fill_vertline(Game->buffer, x, 0, wall_top, full_ceil_color);
+    fill_vertline(Game->buffer, x, wall_btm, PIXELY, full_floor_color);
+    #endif
 
   } /* for x in PIXELX - wall rendering */
 
@@ -166,12 +275,12 @@ void end_rendering(Game_Manager* Game) {
   SDL_UpdateTexture(Game->texture, NULL, Game->buffer, PIXELX * sizeof(unsigned)); 
   SDL_RenderTexture(Game->renderer, Game->texture, NULL, NULL);
 
-  // /*
+  #ifdef PRINT_FPS
   char fps[64];
   snprintf(fps, 64, "%Lf", Game->get_fps());
   SDL_SetRenderDrawColor(Game->renderer, 0, 255, 0, 255);
   SDL_RenderDebugText(Game->renderer, 0.0f, 0.0f, fps);
-  // */
+  #endif
 
   SDL_RenderPresent(Game->renderer);
 }
