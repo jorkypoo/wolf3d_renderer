@@ -7,7 +7,7 @@
 // no idea if these can be hotswitched
 #define FLOOR_RENDERING
 #define FOG_RENDERING
-#define SPRITE_RENDERING
+#define ENTITY_SPRITE_RENDERING
 #define PRINT_FPS
 
 
@@ -260,6 +260,48 @@ void Render(Game_Manager* Game) {
     #endif
 
   } /* for x in PIXELX - wall rendering */
+
+  #ifdef ENTITY_SPRITE_RENDERING
+
+  /* ===== entity rendering ===== */
+
+  // basically the rendering function only cares about the sprite part of an entity
+  // every entity has one and it can either be static or animated - 1 sprite frame or > 1
+  // 
+  // animated sprite's current sprite frame rendered is based on an offset:
+  // frame_num * (twidth * wheight)^2 - this is used as a texture array lookup 
+  //
+  // if it is a static sprite, frame_num should ALWAYS be 0, so you always get the
+  // first element of the texture buffer, not reaching out of bounds of it's array
+  //
+  // this is possible bc animation frames are ASSUMED to be laid out contiguously
+  // in memory, so its just a matter of making sure that is always true
+  //
+  // each animated sprite can also contain a pointer to the beginning of their sprite
+  // frames so you don't have to perform complex array lookups during rendering
+
+  // for each object.entity within all objects (it'll be a linked list):
+  // calculate distance from the player to the entity
+  // sort the linked list based on which is furthest from player (measure how fast this is - it should be fast!)
+  //  
+  // for each object.sprite within all objects:
+  // boring maths i'll copy paste
+  // if FOG_RENDERING is defined: fog calculations
+  // calculate the offset for the current sprite's sprite frame; see above
+  //
+  // (btw if a sprite moves, it's position shall be updated in update())
+  //
+  // (these values are calulated in the boring maths part)
+  // for each x in the x space to draw:
+  // for each y in the y space to draw:
+  // grab the colour: an array lookup from the current sprite * offset
+  // if the alpha channel is 0xFF:
+  // if FOG_RENDERING is defined: add fog to colour grabbed
+  // fill the point
+  // 
+  // easy enough!
+  
+  #endif // ENTITY_SPRITE_RENDERING
 
   end_rendering(Game);
 }
