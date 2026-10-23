@@ -24,5 +24,6 @@
 
 typedef uint32_t Color;
 typedef uint8_t  ARGB;
+typedef uint64_t uint64; // same as SDL3's Uint64 definition
 
 #endif

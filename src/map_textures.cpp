@@ -1,4 +1,4 @@
-#include "../inc/textures.h"
+#include "../inc/map_textures.h"
 
 // fogmap structure
 // this could later be a dynamic array, to support multiple fogmaps
@@ -33,6 +33,7 @@ int Init_Fogmap(void) {
 int Init_Textures(void) {
   // basically, read these values from a json instead of doing this manually
   // look in a specified mods folder too, so people can add their own textures
+  // also, i should allow people to use their own lookup names
 
   TEXTURES["assets/redbrick.png"] = new Color[sq(TEXSIZE)];
   load_image_to_buff("assets/redbrick.png",TEXTURES["assets/redbrick.png"],TEXSIZE,TEXSIZE);

@@ -1,3 +1,17 @@
 a few things RE FLOOR_RENDERING in render.cpp must be filled out; specifically, the
 game must provide a ceiling/floor colour for each level, or a default if none was provided
 this mostly depends on how levels are structured
+
+define the game mgr and player functions inside their own source files omg
+i didn't know u could do that lolll
+
+sprite.cpp requires the type Uint64 - a typedef defined by SDL
+it's just uint64_t under the hood but...
+sdl is only included in game.h 
+embed the library into inc/thirdparty/ so the software ships with it
+
+i want two different structures for textures: one for tiles & one for sprites
+the sprites - animated or not - require a bit of extra information attached to each one
+such as number of sprites, if it's a one-shot, etc; hence the need for the separate structure
+each sprite will have a pointer to their currently attached texture and changing the sprite
+will not happen often (for example, every frame) - unordered_map lookup time is not an issue

@@ -1,6 +1,7 @@
 #include "../inc/gameloop.h"
 #include "../inc/draw.h"
-#include "../inc/textures.h"
+#include "../inc/map_textures.h"
+#include "../inc/object_textures.h"
 #include "../inc/map.h"
 
 // macros now, and can later be put as settings

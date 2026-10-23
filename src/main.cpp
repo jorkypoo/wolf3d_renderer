@@ -1,10 +1,12 @@
 #include <iostream>
 using namespace std;
+
 #include "../inc/def.h"
 #include "../inc/game.h"
 #include "../inc/gameloop.h"
 #include "../inc/map.h"
-#include "../inc/textures.h"
+#include "../inc/map_textures.h"
+#include "../inc/object_textures.h"
 
 
 char WINDOWNAME[] = "Wolf3D in C++";
@@ -21,6 +23,7 @@ int main(int argv, char** argc) {
 
   // images are to be loaded into the global texture buffer here
   Init_Global_Textures();
+  Init_Global_Sprites();
   Init_Map();
   // print_map();
   
