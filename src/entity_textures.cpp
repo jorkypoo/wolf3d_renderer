@@ -1,4 +1,4 @@
-#include "../inc/object_textures.h"
+#include "../inc/entity_textures.h"
 
 unordered_map<string, i_sprite_texture> SPRITES;
 

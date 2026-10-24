@@ -1,5 +1,25 @@
-#include "../inc/object.h"
-#include "../inc/object_textures.h"
+#include "../inc/entity.h"
+#include "../inc/entity_textures.h"
+
+Sprite::Sprite(Color* tex, unsigned nf, Uint64 ue, int os) {
+  if (tex) texture = tex;
+
+  num_frames = nf;
+  frame_num = 0;
+  update_every = ue;
+
+  oneshot = os;
+  update = 0;
+
+  timer_time = 0;
+  timer_last_update = 0;
+
+  sprite_dist = 0;
+}
+
+Sprite::~Sprite() {
+  texture = nullptr;
+}
 
 void Sprite::update_texture(const char* lookup_name) {
   if (SPRITES.find(lookup_name) == SPRITES.end()) return;

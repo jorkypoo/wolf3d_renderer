@@ -1,7 +1,7 @@
 #include "../inc/gameloop.h"
 #include "../inc/draw.h"
 #include "../inc/map_textures.h"
-#include "../inc/object_textures.h"
+#include "../inc/entity.h"
 #include "../inc/map.h"
 
 // macros now, and can later be put as settings
@@ -301,6 +301,92 @@ void Render(Game_Manager* Game) {
   // fill the point
   // 
   // easy enough!
+
+  for (Entity* cur : ENTITIES) {
+    double distx = Game->player->get_posx() - cur->get_posx();    
+    double disty = Game->player->get_posy() - cur->get_posy();
+    cur->sprite->set_sprite_dist(distx * distx + disty * disty);
+  }
+
+  // sort the sprites here based on their distance
+
+  // begin looping through the linked list
+  for (Entity* cur : ENTITIES) {
+
+    v2 sprite = {
+      cur->get_posx() - Game->player->get_posx(),
+      cur->get_posy() - Game->player->get_posy()
+    };
+
+    double inv_det = 1.0 / ( (Game->player->get_planex() * Game->player->get_diry()) - \
+                             (Game->player->get_dirx() * Game->player->get_planey()) );
+    
+     
+    v2 transform = {
+      inv_det * ( Game->player->get_diry() * sprite.x - Game->player->get_dirx() * sprite.y),
+      inv_det * (-Game->player->get_planey() * sprite.x + Game->player->get_planex() * sprite.y)
+    };
+
+    // basically don't render the sprite if it is very close
+    if (transform.y < 0.1) continue;
+
+    int spriteScreenX = (int) (((float) PIXELX / 2) * (1 + transform.x / transform.y));
+
+    int spriteHeight = abs((int)(PIXELY / (transform.y))); 
+    int spriteWidth =  abs((int)(PIXELY / (transform.y)));
+
+    v2i draw_start = {
+      (-spriteWidth / 2) + spriteScreenX,
+      (-spriteHeight / 2) + (PIXELY / 2)
+    };
+
+    // cap the drawing values to be in the bounds of the buffer
+    if (draw_start.x < 0) draw_start.x = 0;
+    if (draw_start.y < 0) draw_start.y = 0;
+
+    v2i draw_end = {
+      (spriteWidth / 2) + spriteScreenX,
+      (spriteHeight / 2) + (PIXELY / 2)
+    };
+
+    // again, cap values within the bounds of the buffer
+    if (draw_end.x >= PIXELX) draw_end.x = PIXELX - 1;
+    if (draw_end.y >= PIXELY) draw_end.y = PIXELY - 1;
+        
+    #ifdef FOG_RENDERING
+    unsigned fog_amt = (cur->sprite->get_sprite_dist() / OBJ_FOGDIST) * FOGLEVELS;
+    if (fog_amt >= FOGLEVELS) fog_amt = FOGLEVELS-1;
+    #endif
+
+    unsigned offset = cur->sprite->get_frame_num() * SQ(TEXSIZE);
+
+    // loop through every vertical stripe of the sprite on screen
+    for (int stripe = draw_start.x; stripe < draw_end.x; stripe++) {
+      // wtf are the magic numbers...
+      int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * TEXSIZE / spriteWidth) / 256;
+
+      // do not render sprites that u can't see...
+      if (transform.y > 0 && stripe > 0\
+          && stripe < PIXELX && transform.y < zbuff[stripe]) {
+
+        // look through every row on the screen for every column
+        for (int y = draw_start.y; y < draw_end.y; y++) {
+          int d = (y) * 256 - PIXELY * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
+          int texY = ((d * TEXSIZE) / spriteHeight) / 256;
+          Color color = cur->sprite->texture[offset + (TEXSIZE * texY + texX)]; //get current color from the texture
+
+          if((color & 0xFF000000) == 0xFF000000) { // don't draw anything where the alpha channel isnt 255
+            #ifdef FOG_RENDERING
+            color = add_fog_to_color(FOGMAP, color, fog_amt);
+            #endif
+            fill_point(Game->buffer, stripe, y, color); 
+          }
+        }
+
+      } //  if sprite is in view
+    }
+
+  }
   
   #endif // ENTITY_SPRITE_RENDERING
 

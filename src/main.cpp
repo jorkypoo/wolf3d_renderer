@@ -6,7 +6,8 @@ using namespace std;
 #include "../inc/gameloop.h"
 #include "../inc/map.h"
 #include "../inc/map_textures.h"
-#include "../inc/object_textures.h"
+#include "../inc/entity.h"
+#include "../inc/entity_textures.h"
 
 
 char WINDOWNAME[] = "Wolf3D in C++";
@@ -24,16 +25,24 @@ int main(int argv, char** argc) {
   // images are to be loaded into the global texture buffer here
   Init_Global_Textures();
   Init_Global_Sprites();
+  Init_Entities();
   Init_Map();
   // print_map();
   
 
   while (Game.is_running()) {
     Input(&Game);
-    // Update(&Game);
+    Update(&Game);
     Render(&Game);
+    // for (Entity* e : ENTITIES) cout << e->get_id() << "\t";
+    // cout << "\n";
     Game.calculate_fps();
   }
+
+  // cleanup
+  Free_Entities();
+  Free_Textures();
+  Free_Sprites();
 
   return 0;
 }
