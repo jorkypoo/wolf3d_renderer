@@ -184,7 +184,7 @@ class Game_Manager {
     }
 
     // returns 0 on failure & 1 on success
-    int Init(char* window_name, int window_w, int window_h, int tex_w, int tex_h) {
+    int Init(const char* window_name, int window_w, int window_h, int tex_w, int tex_h) {
       if (!SDL_Init(SDL_INIT_VIDEO)) {
         cout << "SDL_Init Failed";
         return 0;

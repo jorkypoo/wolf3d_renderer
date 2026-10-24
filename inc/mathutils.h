@@ -14,6 +14,8 @@ struct v2i { int x; int y; };
 
 #define SQ(a) (a*a)
 #define CUBE(a) (a*a*a)
+#define MS_TO_NS(n) (n * 1000000)
+
 
 // #define max(a, b) ({ typeof(a) __a = a; typeof(b) __b = b; __a > __b ? __a : __b; })
 // #define min(a, b) ({ typeof(a) __a = a; typeof(b) __b = b; __a < __b ? __a : __b; })

@@ -3,6 +3,11 @@
 #ifndef _OBJECTS_
 #define _OBJECTS_
 
+#include <list>
+using namespace std;
+
+#include <SDL3/SDL.h> // SDL_GetTicksNS() & type Uint64
+
 #include "def.h"
 #include "mathutils.h"
 
@@ -10,6 +15,9 @@
 class Sprite;
 class Entity;
 class Object;
+
+// global linked list of all objects (static & scripted/animated)
+extern list<Object> OBJECTS;
 
 class Sprite {
   public:
@@ -21,8 +29,11 @@ class Sprite {
 
     unsigned get_num_frames();
     unsigned get_frame_num();
-    uint64 get_update_every();
-    int is_oneshot();
+    Uint64   get_update_every();
+    int      is_oneshot();
+
+    // if timer is marked as a oneshot, play the animation
+    void activate_oneshot_sprite();
 
   private:
     Color* texture;      // pointer to the texture to render - can be swapped out

@@ -10,7 +10,7 @@
 
 #include <string>
 #include <unordered_map>
-#include <vector>
+#include <list>
 using namespace std;
 
 #include "image_load.h"
