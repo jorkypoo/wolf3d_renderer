@@ -1,4 +1,5 @@
 #include "../inc/gameloop.h"
+#include "../inc/entity.h"
 
 void Input(Game_Manager* Game) {
   const double rotspeed = 3.0 * Game->get_delta();
@@ -25,6 +26,7 @@ void Input(Game_Manager* Game) {
             Game->set_running_state(0);
             break;
           case SDLK_F2:
+            Add_Entity("poo", "assets/hourai.png", {1.5,1.5});
             break;
         } // e.key.key
     } // e.type

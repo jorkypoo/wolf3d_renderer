@@ -365,17 +365,18 @@ void Render(Game_Manager* Game) {
       // wtf are the magic numbers...
       int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * TEXSIZE / spriteWidth) / 256;
 
-      // do not render sprites that u can't see...
-      if (transform.y > 0 && stripe > 0\
-          && stripe < PIXELX && transform.y < zbuff[stripe]) {
+      // if the sprite is in view
+      if (stripe > 0 && stripe < PIXELX && transform.y < zbuff[stripe]) {
 
-        // look through every row on the screen for every column
+        // loop through every row on the screen for every column
         for (int y = draw_start.y; y < draw_end.y; y++) {
+
           int d = (y) * 256 - PIXELY * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
           int texY = ((d * TEXSIZE) / spriteHeight) / 256;
           Color color = cur->sprite->texture[offset + (TEXSIZE * texY + texX)]; //get current color from the texture
 
-          if((color & 0xFF000000) == 0xFF000000) { // don't draw anything where the alpha channel isnt 255
+          // if the color to be drawn is full alpha
+          if((color & 0xFF000000) == 0xFF000000) { 
             #ifdef FOG_RENDERING
             color = add_fog_to_color(FOGMAP, color, fog_amt);
             #endif
@@ -384,7 +385,7 @@ void Render(Game_Manager* Game) {
         }
 
       } //  if sprite is in view
-    }
+    }   // for stripe in sprite on screen
 
   }
   

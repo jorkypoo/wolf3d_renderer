@@ -34,8 +34,6 @@ int main(int argv, char** argc) {
     Input(&Game);
     Update(&Game);
     Render(&Game);
-    // for (Entity* e : ENTITIES) cout << e->get_id() << "\t";
-    // cout << "\n";
     Game.calculate_fps();
   }
 
