@@ -29,11 +29,15 @@ class Status_Effect;
 
 class Parameters {
   public:
-    // only the parameters can be updated - everything else depends on the params
-    Parameters(uint v=0, uint w=0, uint s=0, uint d=0, uint i=0, uint f=0, uint c=0, uint l=0);
+    Parameters() = default;
+    Parameters(uint lvl);
     ~Parameters() = default;
 
+    // only the parameters can be updated - everything else depends on the params
     void level_up(uint v=0, uint w=0, uint s=0, uint d=0, uint i=0, uint f=0, uint c=0, uint l=0);
+    // 
+    // levels the player based on their pre-disposition to their parameters
+    // void level_up();
 
     void add_xp(uint x) { exp += x; }
     uint get_xp()       { return exp; }
@@ -41,6 +45,7 @@ class Parameters {
 
     // N.B. pararms & attributes don't have getters/setters bc i'm lazy
     // fuck that!!! so be careful
+    // still, i'll provide an interface for setting custom 
 
     // parameters
     uint Vitality;

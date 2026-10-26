@@ -22,19 +22,10 @@ int mult_will_overflow(unsigned int a, unsigned int b) {
 }
 
 
-Parameters::Parameters(uint v, uint w, uint s, uint d, uint i, uint f, uint c, uint l) {
-  v > LEVELCAP ? Vitality = LEVELCAP     : Vitality = v;
-  w > LEVELCAP ? Willpower = LEVELCAP    : Willpower = w;
-  s > LEVELCAP ? Strength = LEVELCAP     : Strength = s;
-  d > LEVELCAP ? Dexterity = LEVELCAP    : Dexterity = d;
-  i > LEVELCAP ? Intelligence = LEVELCAP : Intelligence = i;
-  f > LEVELCAP ? Faith = LEVELCAP        : Faith = f;
-  c > LEVELCAP ? Charisma = LEVELCAP     : Charisma = c;
-  l > LEVELCAP ? Luck = LEVELCAP         : Luck = l;
-
+Parameters::Parameters(uint lvl) {
+  level = lvl;
   exp = 0;
   exp_last = 0;
-  level = 1;
 
   adjust_attr_from_level();
 }
@@ -60,17 +51,16 @@ void Parameters::adjust_attr_from_level() {
   TotalHP;
   TotalMP;
   TotalStam;
-  Stamina;  
 
   Satiation;
   Immunity;
   Movespeed;
   Movepen;
-  Encumberance; 
+  Encumberance;
   Evasion;
   Poise;
 
-  SlashDef; 
+  SlashDef;
   PierceDef;
   BluntDef;
 
