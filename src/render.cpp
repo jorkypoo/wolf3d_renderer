@@ -2,7 +2,7 @@
 #include "../inc/draw.h"
 #include "../inc/map_textures.h"
 #include "../inc/entity.h"
-#include "../inc/map.h"
+// #include "../inc/map.h"
 
 // macros now, and can later be put as settings
 // no idea if these can be hotswitched

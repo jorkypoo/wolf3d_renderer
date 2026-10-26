@@ -9,10 +9,14 @@ using namespace std;
 #include "def.h"
 #include "mathutils.h"
 
+#include "param.h"
+
 class Sprite;
 class Entity;
 
 // global linked list of all objects (static & scripted/animated)
+// entities ai scripts & timers updated in update() via this list
+// and their sprite rendered in render() too
 extern list<Entity*> ENTITIES;
 
 int Init_Entities(void);
@@ -23,6 +27,8 @@ int Add_Entity(const char* entity_lookup_name, const char* tex_lookup_name, v2 p
 class Entity {
   public:
     Sprite* sprite;
+    // parameters class, perhaps
+    // ai script
 
     Entity(Sprite* s, v2 p, v2 d);
     ~Entity();
