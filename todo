@@ -2,8 +2,7 @@ a few things RE FLOOR_RENDERING in render.cpp must be filled out; specifically, 
 game must provide a ceiling/floor colour for each level, or a default if none was provided
 this mostly depends on how levels are structured
 
-define the game mgr and player functions inside their own source files omg
-i didn't know u could do that lolll
+sprites aren't being rendered on y = MAPY-1
 
 sprite.cpp requires the type Uint64 - a typedef defined by SDL
 it's just uint64_t under the hood but...

@@ -44,6 +44,11 @@ class Player {
 
   public:
     Parameters param;
+    // vector<Status_Effect>
+    // 
+    // inventory comp
+    // hand comp
+    // hand comp
 
     Player();
     ~Player() = default;

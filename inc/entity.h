@@ -26,11 +26,12 @@ int Add_Entity(const char* entity_lookup_name, const char* tex_lookup_name, v2 p
 
 class Entity {
   public:
-    Sprite* sprite;
-    // parameters class, perhaps
+    Sprite* sprite;   // their animated sprite
+    Parameters param; // their hp, resistances & stuff
+    Damage damage;    // the type of damage they inflict
     // ai script
 
-    Entity(Sprite* s, v2 p, v2 d);
+    Entity(Sprite* s, v2 p, v2 d, uint lvl);
     ~Entity();
 
     void Remove(void);
@@ -45,11 +46,15 @@ class Entity {
     double get_dirx(void) { return dir.x; }
     double get_diry(void) { return dir.y; }
 
+    void set_radius(double r) { radius = r; }
+    double get_radius()   { return radius; }
+
     unsigned get_id() { return id; }
     
   private:
     v2 pos;
     v2 dir;
+    double radius;
     unsigned id;
 };
 

@@ -35,6 +35,19 @@ inline v2 normalise(v2 _mth_v) {
   return (v2) { _mth_v.x / length(_mth_v), _mth_v.y / length(_mth_v) };
 }
 
+// will two circles collide
+inline int is_colliding(v2 _av, double _ar, v2 _bv, double _br) {
+  /* double _dist2 = SQ(_av.x - _bv.x) + SQ(_av.y - _bv.y);
+  double _rad_sum2 = SQ(_ar + _br);
+  
+  return _dist2 <= _rad_sum2; */
+  double _dx = _av.x - _bv.x;
+  double _dy = _av.y - _bv.y;
+  double _r = _ar + _br;
+
+  return _dx * _dx + _dy * _dy <= _r * _r;
+}
+
 double length(v2);
 double dot(v2, v2);
 v2     normalise(v2);

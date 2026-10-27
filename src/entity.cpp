@@ -9,11 +9,13 @@ list<Entity*> ENTITIES;
 static unsigned _id_num = 1;
 
 
-Entity::Entity(Sprite* sp, v2 p, v2 d) {
+Entity::Entity(Sprite* sp, v2 p, v2 d, uint lvl) {
   sprite = sp;
   id = _id_num++;
   pos = p;
   dir = d;
+
+  param = Parameters(lvl);
 }
 
 Entity::~Entity() {
@@ -50,7 +52,8 @@ int Add_Entity(const char* entity_lookup_name, const char* tex_lookup_name, v2 p
   Sprite* dest = new Sprite(t.tex, t.num_frames, t.update_every, t.oneshot);
 
   // look up the correct entity params and stuff to initialise w/ constructor
-  Entity* e = new Entity(dest, p, {0,0});
+  Entity* e = new Entity(dest, p, {0,0}, 1);
+  e->set_radius(0.2);
   ENTITIES.push_back(e);
 
   return 1;

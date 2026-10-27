@@ -20,7 +20,7 @@ int main(int argv, char** argc) {
   if(!Game.Init(WINDOWNAME, WINDOWX, WINDOWY, PIXELX, PIXELY))
     cout << "erm oh well\n";
 
-  Game.player->set_spawn_point(3, 2);
+  Game.player->set_spawn_point(1.5, 1.5);
 
   // images are to be loaded into the global texture buffer here
   Init_Global_Textures();

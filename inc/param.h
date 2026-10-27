@@ -16,6 +16,8 @@
 #include <unordered_map>
 #include <string>
 #include <climits>
+
+#include <iostream>
 using namespace std;
 
 #include "def.h"
@@ -24,7 +26,44 @@ using namespace std;
 typedef unsigned int uint;
 
 class Parameters;
+class Damage;
 class Status_Effect;
+
+// basically damage is a class that is attached to every entity
+// it represents what damage the player will take when they attack/come into
+// contact with them - check the update() function
+//
+// the players damage will of course be updated with whatever equipment theyre wearing
+// but enemies will just deal a single flat damage type
+
+
+class Damage {
+  public:
+    Damage();
+    ~Damage() = default;
+
+    // how long attribute drains last
+    uint64 time_lasts;
+
+    // attribute drains
+    int mp_drain;
+    int stam_drain;
+
+    // damages
+    int slash_damage; 
+    int pierce_damage;
+    int blunt_damage;
+
+    int lightning_damage;
+    int fire_damage;
+    int frost_damage;
+    int Poison_damage;
+    int magic_damage;
+    int nuclear_damage;
+
+    int divine_damage;
+    int profane_damage;
+};
 
 
 class Parameters {
@@ -35,10 +74,14 @@ class Parameters {
 
     // only the parameters can be updated - everything else depends on the params
     void level_up(uint v=0, uint w=0, uint s=0, uint d=0, uint i=0, uint f=0, uint c=0, uint l=0);
-    // 
     // levels the player based on their pre-disposition to their parameters
     // void level_up();
 
+    void take_damage(Damage* source) {
+      this->HP -= source->slash_damage;
+      cout << "taken damage: " << this->HP;
+    }
+    
     void add_xp(uint x) { exp += x; }
     uint get_xp()       { return exp; }
     uint get_level()    { return level; }
@@ -58,37 +101,38 @@ class Parameters {
     uint Luck;
     
     // attributes
-    uint TotalHP;      // total health points available
-    uint HP;           // current HP
-    uint TotalMP;      // total mana points available
-    uint MP;           // current MP
-    uint TotalStam;    // total stamina available for movements
-    uint Stamina;      // current stamina
+    int TotalHP;      // total health points available
+    int HP;           // current HP
+    int TotalMP;      // total mana points available
+    int MP;           // current MP
+    int TotalStam;    // total stamina available for movements
+    int Stamina;      // current stamina
 
-    uint Satiation;    // resistance to starvation
-    uint Immunity;     // resistance to status effects
-    uint Movespeed;    // move speed when moving forwards/backwards
-    uint Movepen;      // move penalty applied when moving backwards
-    uint Encumberance; // how much gear you can carry 
-    uint Evasion;      // ability to dodge incoming attacks
-    uint Poise;        // ability to withstand incoming attacks
+    int Satiation;    // resistance to starvation
+    int Immunity;     // resistance to status effects
+    int Movespeed;    // move speed when moving forwards/backwards
+    int Movepen;      // move penalty applied when moving backwards
+    int Encumberance; // how much gear you can carry 
+    int Evasion;      // ability to dodge incoming attacks
+    int Poise;        // ability to withstand incoming attacks
+    int Appraisal;    // ability to appraise items & understand their effects
 
     // physical defenses
-    uint SlashDef; 
-    uint PierceDef;
-    uint BluntDef;
+    int SlashDef; 
+    int PierceDef;
+    int BluntDef;
 
     // elemental defenses
-    uint LightningDef;
-    uint FireDef;
-    uint FrostDef;
-    uint PoisonDef;
-    uint MagicDef;
-    uint NuclearDef;
+    int LightningDef;
+    int FireDef;
+    int FrostDef;
+    int PoisonDef;
+    int MagicDef;
+    int NuclearDef;
 
     // godly defenses
-    uint DivineDef;
-    uint ProfaneDef;
+    int DivineDef;
+    int ProfaneDef;
 
   private:
     uint exp;
@@ -101,6 +145,7 @@ class Parameters {
     void adjust_attr_from_level();
 
 };
+
 
 // status effects shall be initialised in maybe erm
 void Init_Status_Effects(void);
