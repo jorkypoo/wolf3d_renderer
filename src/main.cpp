@@ -5,7 +5,6 @@ using namespace std;
 #include "../inc/game.h"
 #include "../inc/gameloop.h"
 #include "../inc/map.h"
-#include "../inc/map_textures.h"
 #include "../inc/entity.h"
 #include "../inc/entity_textures.h"
 

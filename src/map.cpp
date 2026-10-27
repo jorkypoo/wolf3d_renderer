@@ -9,7 +9,7 @@ Tile GAMEMAP[MAPX*MAPY];
 // this is just my way of organizing all the me- and user-defined tiles
 // ill read them from a json files laaater but i just want somehting working
 // allow for users to create their own lookup names - it doesn't have to be the filename!
-unordered_map<string, Tile> tiles;
+static unordered_map<string, Tile> tiles;
 
 // fogmap structure
 // this could later be a dynamic array, to support multiple fogmaps
