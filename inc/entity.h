@@ -27,8 +27,8 @@ int Add_Entity(const char* entity_lookup_name, const char* tex_lookup_name, v2 p
 class Entity {
   public:
     Sprite* sprite;   // their animated sprite
-    Parameters param; // their hp, resistances & stuff
-    Damage damage;    // the type of damage they inflict
+    // Parameters param; // their hp, resistances & stuff
+    // Damage damage;    // the type of damage they inflict
     // ai script
 
     Entity(Sprite* s, v2 p, v2 d, uint lvl);

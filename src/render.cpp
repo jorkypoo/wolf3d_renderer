@@ -376,7 +376,8 @@ void Render(Game_Manager* Game) {
           Color color = cur->sprite->texture[offset + (TEXSIZE * texY + texX)]; //get current color from the texture
 
           // if the color to be drawn is full alpha
-          if((color & 0xFF000000) == 0xFF000000) { 
+          if ((color & 0xFF000000) == 0xFF000000) { 
+          // if ((color & 0xFF000000) != 0x00) { // sorry prawcin
             #ifdef FOG_RENDERING
             color = add_fog_to_color(FOGMAP, color, fog_amt);
             #endif

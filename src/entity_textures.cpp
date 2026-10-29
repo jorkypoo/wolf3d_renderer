@@ -21,14 +21,14 @@ int Init_Sprites(void) {
   load_image_to_buff("assets/barrel.png",SPRITES["assets/barrel.png"].tex,TEXSIZE,TEXSIZE);
 
   // an animated sprite
-  SPRITES["assets/hourai.png"] = {0, "assets/hourai.png", 2, 200, 0};
+  SPRITES["assets/hourai.png"] = {0, "assets/hourai.png", 2, 250, 0};
   SPRITES["assets/hourai.png"].tex = new Color[( sq(TEXSIZE) * (SPRITES["assets/hourai.png"].num_frames) )];
   // this step will have to be completed for however many sprite frames exist under the same texture
   // one sprite frame must be it's own unique file, sorry
   // also maintain an offset as this loading of images will be automatic
   // unsigned offset = i * sq(TEXSIZE) - first 
-  load_image_to_buff("assets/hourai1.png",SPRITES["assets/hourai.png"].tex,            TEXSIZE,TEXSIZE);
-  load_image_to_buff("assets/hourai2.png",SPRITES["assets/hourai.png"].tex+sq(TEXSIZE),TEXSIZE,TEXSIZE);
+  load_image_to_buff("assets/yuki1a.png",SPRITES["assets/hourai.png"].tex,            TEXSIZE,TEXSIZE);
+  load_image_to_buff("assets/yuki2a.png",SPRITES["assets/hourai.png"].tex+sq(TEXSIZE),TEXSIZE,TEXSIZE);
 
   return 1;
 }

@@ -15,12 +15,14 @@
 
 // a last resort if the image cannot be read by stb_image or resized by stb_image_resize2
 // will segfault if the buff was NOT of size w*h
+//
+// should be returning a bool to provide info without printing shit to stderr
 void provide_missing_texture(unsigned* buff, int w, int h) {
   // yes those are the exact colours when u dont install cs soucre lol
   for (int x = 0; x < w; x++)
   for (int y = 0; y < h; y++) {
-    if (x < w/2 && y < h/2)   buff[h * y + x] = 0xFFFF00DC;
-    if (x > w/2 && y < h/2)   buff[h * y + x] = 0xFF010001;
+    if (x <= w/2 && y <= h/2)   buff[h * y + x] = 0xFFFF00DC;
+    if (x >= w/2 && y <= h/2)   buff[h * y + x] = 0xFF010001;
     if (x <= w/2 && y >= h/2) buff[h * y + x] = 0xFF010001;
     if (x >= w/2 && y >= h/2) buff[h * y + x] = 0xFFFF00DC;
   }

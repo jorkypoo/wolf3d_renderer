@@ -15,7 +15,7 @@ Entity::Entity(Sprite* sp, v2 p, v2 d, uint lvl) {
   pos = p;
   dir = d;
 
-  param = Parameters(lvl);
+  // param = Parameters(lvl);
 }
 
 Entity::~Entity() {

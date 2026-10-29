@@ -39,7 +39,7 @@ class Status_Effect;
 
 class Damage {
   public:
-    Damage();
+    Damage() { ; }
     ~Damage() = default;
 
     // how long attribute drains last
