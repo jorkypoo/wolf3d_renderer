@@ -2,9 +2,11 @@
 #include "../inc/entity.h"
 
 void Input(Game_Manager* Game) {
-  const double rotspeed = 3.0 * Game->get_delta();
-  const double movspeed = 3.0 * Game->get_delta();
+  const double rotspeed = 2.8 * Game->get_delta();
+  const double movspeed = 2.5 * Game->get_delta();
+  // const double movspeed = Game->player->param.get_movespeed() * Game->get_delta();
   const double mov_penalty = 0.8;
+  // const double mov_penality = Game->player->get_movepenalty();
 
   SDL_Event e;
   while (SDL_PollEvent(&e)) {

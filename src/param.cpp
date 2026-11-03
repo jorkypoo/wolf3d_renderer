@@ -25,6 +25,8 @@ inline int mult_will_overflow(unsigned int a, unsigned int b) {
 
 Parameters::Parameters(uint v,uint w,uint s,uint d,uint i,uint f,uint c,uint l)
 {
+  const int disposition_bonus = 3;
+
   vitality = v;
   willpower = w;
   strength = s;
@@ -34,29 +36,163 @@ Parameters::Parameters(uint v,uint w,uint s,uint d,uint i,uint f,uint c,uint l)
   charisma = c;
   luck = l;
 
-  vit_xp = 0; uint vit_disposition = 100 + (v * 3);
-  wpr_xp = 0; uint wpr_disposition = 100 + (w * 3);
-  str_xp = 0; uint str_disposition = 100 + (s * 3);
-  dex_xp = 0; uint dex_disposition = 100 + (d * 3);
-  int_xp = 0; uint int_disposition = 100 + (i * 3);
-  fai_xp = 0; uint fai_disposition = 100 + (f * 3);
-  chr_xp = 0; uint chr_disposition = 100 + (c * 3);
-  lck_xp = 0; uint lck_disposition = 100 + (l * 3);
+  vit_xp = 0; vit_disp = v * disposition_bonus;
+  wpr_xp = 0; wpr_disp = w * disposition_bonus;
+  str_xp = 0; str_disp = s * disposition_bonus;
+  dex_xp = 0; dex_disp = d * disposition_bonus;
+  int_xp = 0; int_disp = i * disposition_bonus;
+  fai_xp = 0; fai_disp = f * disposition_bonus;
+  chr_xp = 0; chr_disp = c * disposition_bonus;
+  lck_xp = 0; lck_disp = l * disposition_bonus;
+
+  hp = get_maxhp();
+  mp = get_maxmp();
+  stamina = get_maxstam();
+  hunger = get_maxhunger();
+  
+  hunger_accumulator = 0;
+  stamina_accumulator = 0;
+  mp_accumulator = 0;
 }
 
 void Parameters::award_xp(Params param, uint xp) {
   switch (param) {
-    case vit:  break;
-    case str:  break;
-    case dex:  break;
-    case wpwr: break;
-    case inte: break;
-    case fai:  break;
-    case chr:  break;
-    case lck:  break;
+    case vit:
+      vit_xp += xp * vit_disp;
+      while (vit_xp >= total_xp_rq(vitality+1)) vitality++;
+      break;
+      
+    case str:
+      str_xp += xp * str_disp;
+      while (str_xp >= total_xp_rq(strength+1)) strength++;
+      break;
+      
+    case dex:
+      dex_xp += xp * dex_disp;
+      while (dex_xp >= total_xp_rq(dexterity+1)) dexterity++;
+      break;
+      
+    case wpwr:
+      wpr_xp += xp * wpr_disp;
+      while (wpr_xp >= total_xp_rq(willpower+1)) willpower++;
+      break;
+      
+    case inte:
+      int_xp += xp * int_disp;
+      while (int_xp >= total_xp_rq(intelligence+1)) intelligence++;
+      break;
+      
+    case fai:
+      fai_xp += xp * fai_disp;
+      while (fai_xp >= total_xp_rq(faith+1)) faith++;
+      break;
+      
+    case chr:
+      chr_xp += xp * chr_disp;
+      while (chr_xp >= total_xp_rq(charisma+1)) charisma++;
+      break;
+      
+    case lck:
+      lck_xp += xp * lck_disp;
+      while (lck_xp >= total_xp_rq(luck+1)) luck++;
+      break;
+      
+    default: break;
+  }
+}
 
-    case noparam: break;
-    default:      break;
+
+uint Parameters::get_param_level(Params param) {
+  switch (param) {
+    case vit:  return vitality; 
+    case str:  return strength;
+    case dex:  return dexterity;
+    case wpwr: return willpower;
+    case inte: return intelligence;
+    case fai:  return faith;
+    case chr:  return charisma;
+    case lck:  return luck;
+    default:   return 0;
+  }
+}
+
+
+uint Parameters::get_maxhp() {
+  return (vitality * 5) + (strength * 2) + (willpower * 3) + 40;
+}
+uint Parameters::get_maxmp() {
+  return (willpower * 3) + (intelligence * 3) + (charisma * 2) + 25;
+}
+uint Parameters::get_maxstam() {
+  return (vitality * 5) + (dexterity * 3) + 10;
+}
+uint Parameters::get_maxhunger() {
+  return (vitality * 5) + (willpower * 5) + 90;
+}
+double Parameters::get_movespeed() {
+  return (dexterity * 0.08) + 2.4;
+}
+uint Parameters::get_composure() {
+  return (strength * 3) + (luck * 2) + 70;
+}
+uint Parameters::get_agility() {
+  return (dexterity * 3) + (luck * 2) + 70;
+}
+uint Parameters::get_fortitude() {
+  return (intelligence * 2) + (faith * 2) + (luck) + 70;
+}
+uint Parameters::get_endurance() {
+  return (strength * 2) + (vitality);
+}
+uint Parameters::get_satiety() {
+  return (vitality * 10) + (willpower * 8) - (dexterity);
+}
+uint Parameters::get_bartering() {
+  return (charisma * 5) + (faith * 5) + 50;
+}
+uint Parameters::get_lore() {
+  return (intelligence * 2) + (faith * 2) + (charisma * 5);
+}
+uint Parameters::get_stealth() {
+  return (dexterity * 5) + (willpower * 2) - (strength * 2);
+}
+void Parameters::recover_hp(uint amt) {
+  hp = std::min(hp+amt, get_maxhp());
+}
+void Parameters::recover_mp(long double delta) {
+  mp_accumulator += delta; // times by constants
+
+  if (mp_accumulator >= 1.0L) {
+    mp = std::min(++mp, get_maxmp());
+    mp_accumulator -= 1.0L;
+  }
+}
+void Parameters::recover_stam(long double delta) {
+   stamina_accumulator += delta;
+
+  if (stamina_accumulator >= 1.0L) {
+    stamina = std::min(++stamina, get_maxstam());
+    stamina_accumulator -= 1.0L;
+  }
+ }
+void Parameters::recover_hunger(uint amt) {
+   hunger = std::min(hunger+amt, get_maxhunger());
+ }
+void Parameters::deplete_hp(uint amt) {
+  hp = sub_will_underflow(hp,amt) ? 0 : hp - amt;
+}
+void Parameters::deplete_mp(uint amt) {
+  mp = sub_will_underflow(mp,amt) ? 0 : mp - amt;
+}
+void Parameters::deplete_stam(uint amt) {
+  stamina = sub_will_underflow(stamina,amt) ? 0 : stamina - amt;
+}
+void Parameters::deplete_hunger(long double delta) {
+  hunger_accumulator += delta;
+
+  if (hunger_accumulator >= 1.0L) {
+    hunger = std::max(--hunger, get_maxhunger());
+    hunger_accumulator -= 1.0L;
   }
 }
 

@@ -18,6 +18,7 @@
 #include <climits>
 #include <iostream>
 #include "def.h"
+#include "mathutils.h"
 
 typedef unsigned int uint; // for readability, above all else
 
@@ -63,7 +64,19 @@ typedef enum {
 // to said param. classes start with set parameters and certain predispositions to
 // increasing certain parameters
 //
-// the amount of xp to level up is determined by a global structure, defined below
+// the amount of xp required to level a stat to the next is determined by the function
+// and it has a helper below, used when awarding xp
+
+
+inline uint xp_rq(uint l) {
+  return (l*l*l*0.08) + (l*l*0.8) + (5*l) + 100;
+}
+
+inline uint total_xp_rq(uint lvl) {
+  uint total = 0;
+  for (uint i = 1; i < lvl; i++) total += xp_rq(i);
+  return total;
+}
 
 
 
@@ -172,25 +185,36 @@ class Parameters {
     uint get_maxstam();
     uint get_maxhunger();
 
-    uint get_movespeed();
-    uint get_composure();
-    uint get_agility();
-    uint get_fortitude();
-    uint get_endurance();
-    uint get_satiety();
-    uint get_bartering();
-    uint get_lore();
-    uint get_stealth();
+    //*means i havent implemented
+    // means i have
+    double get_movespeed(); //*used in input()
+    uint get_composure();   //*used in Parameters::take_damage()
+    uint get_agility();     //*used in Parameters::take_damage()
+    uint get_fortitude();   //*used in Parameters::take_damage()
+    uint get_endurance();   //*used in Player::equip load... stuff
+    uint get_satiety();     //*used in Parameters::deplete_hunger()
+    uint get_bartering();   //*used in npc interactions
+    uint get_lore();        //*used in inventory stuff
+    uint get_stealth();     //*used in enemy detection radii
 
-    void deplete_hp();
-    void deplete_mp();
-    void deplete_stam();
-    void deplete_hunger();
+    // attribute to change cast times for spells and stuff
+    // attribute to change hit times for weapons and stuff
 
-    void recover_hp();
-    void recover_mp();
-    void recover_stam();
-    void recover_hunger();
+    void recover_hp(uint amt);
+    void recover_mp(long double delta);   // both recover at steady rates
+    void recover_stam(long double delta); // both recover at steady rates
+    void recover_hunger(uint amt);
+
+    void deplete_hp(uint amt);
+    void deplete_mp(uint amt);
+    void deplete_stam(uint amt);
+    void deplete_hunger(long double delta); // stamina depletes at a constant rate
+    
+  private:
+    // lazyyyy
+    double hunger_accumulator;
+    double stamina_accumulator;
+    double mp_accumulator;
     
   protected:
     // parameters
@@ -204,30 +228,29 @@ class Parameters {
     uint luck;
     
     // xp is awarded to a parameter for accomplishing a task
-    // relating to said param
-    // level in a stat is determined by a getter function
+    // relating to said param - 100 to level up now
     uint vit_xp;
-    uint vit_disposition;
+    uint vit_disp;
     uint wpr_xp;
-    uint wpr_disposition;
+    uint wpr_disp;
     uint str_xp;
-    uint str_disposition;
+    uint str_disp;
     uint dex_xp;
-    uint dex_disposition;
+    uint dex_disp;
     uint int_xp;
-    uint int_disposition;
+    uint int_disp;
     uint fai_xp;
-    uint fai_disposition;
+    uint fai_disp;
     uint chr_xp;
-    uint chr_disposition;
+    uint chr_disp;
     uint lck_xp;
-    uint lck_disposition;
+    uint lck_disp;
     
     // attributes - 0 is bad; max is good
-    uint hp;           // current HP
-    uint mp;           // current MP
-    uint stamina;      // current stamina
-    uint hunger;       // current hunger 
+    uint hp;      // current HP
+    uint mp;      // current MP
+    uint stamina; // current stamina
+    uint hunger;  // current hunger 
     
 };
 
