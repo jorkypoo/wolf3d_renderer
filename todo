@@ -8,13 +8,4 @@ nor the sides of the screen x = 0 & x = PIXELX-1
 add a timer library that lets you do stuff like
 EVERY_MS(500) which is probably just a modulo under the hood
 
-sprite.cpp requires the type Uint64 - a typedef defined by SDL
-it's just uint64_t under the hood but...
-sdl is only included in game.h 
-embed the library into inc/thirdparty/ so the software ships with it
-
-i want two different structures for textures: one for tiles & one for sprites
-the sprites - animated or not - require a bit of extra information attached to each one
-such as number of sprites, if it's a one-shot, etc; hence the need for the separate structure
-each sprite will have a pointer to their currently attached texture and changing the sprite
-will not happen often (for example, every frame) - unordered_map lookup time is not an issue
+make a call deferred system for stuff, such as removing entities

@@ -3,8 +3,8 @@
  * the base parameters are levelled up according to a class and maybe covenant
  * all attributes - hp, mp, stamina, attributes - depend on one or more params
  *
- * entities shall have a preset set of parameters, only the player can level up
- * perhaps there is some cheeky predetermined attribute modifying for enemies
+ * entities of all kinds will have parameters, but really most of this stuff is
+ * for the player - i find it unnecessary for entities to be taking hunger into consideration
  *
  * side note: seeing as most of these are unsigned, write helpers for over/underflows
  *
@@ -16,18 +16,41 @@
 #include <unordered_map>
 #include <string>
 #include <climits>
-
 #include <iostream>
-using namespace std;
-
 #include "def.h"
 
-// for readability, above all else
-typedef unsigned int uint;
+typedef unsigned int uint; // for readability, above all else
 
-class Parameters;
-class Damage;
-class Status_Effect;
+typedef enum {
+  noparam,
+  vit,
+  str,
+  dex,
+  wpwr,
+  inte,
+  fai,
+  chr,
+  lck
+} Params;
+
+typedef enum {
+  nophys,
+  slash,
+  pierce,
+  blunt
+} PhysicalDamages;
+
+typedef enum {
+  noelm,
+  lightning,
+  fire,
+  frost,
+  poison,
+  magic,
+  nuclear,
+  divine,
+  profane
+} ElementalDamages;
 
 // basically damage is a class that is attached to every entity
 // it represents what damage the player will take when they attack/come into
@@ -35,140 +58,177 @@ class Status_Effect;
 //
 // the players damage will of course be updated with whatever equipment theyre wearing
 // but enemies will just deal a single flat damage type
+//
+// in order to level up a parameter, you must gain xp by completing tasks related
+// to said param. classes start with set parameters and certain predispositions to
+// increasing certain parameters
+//
+// the amount of xp to level up is determined by a global structure, defined below
+
 
 
 class Damage {
   public:
-    Damage() { ; }
+    Damage(PhysicalDamages param1, uint dmg1, ElementalDamages param2, uint dmg2);
     ~Damage() = default;
 
-    // how long attribute drains last
-    uint64 time_lasts;
+    uint get_slashdmg(); 
+    uint get_piercedmg();
+    uint get_bluntdmg();
+    uint get_lightningdmg();
+    uint get_firedmg();
+    uint get_frostdmg();
+    uint get_poisondmg();
+    uint get_magicdmg();
+    uint get_nucleardmg();
+    uint get_divinedmg();
+    uint get_profanedmg();
 
-    // attribute drains
-    int mp_drain;
-    int stam_drain;
+    void set_slashdmg(uint a);
+    void set_piercedmg(uint a);
+    void set_bluntdmg(uint a);
+    void set_lightningdmg(uint a);
+    void set_firedmg(uint a);
+    void set_frostdmg(uint a);
+    void set_poisondmg(uint a);
+    void set_magicdmg(uint a);
+    void set_nucleardmg(uint a);
+    void set_divinedmg(uint a);
+    void set_profanedmg(uint a);
 
-    // damages
-    int slash_damage; 
-    int pierce_damage;
-    int blunt_damage;
+  private:
+    uint slash_dmg; 
+    uint pierce_dmg;
+    uint blunt_dmg;
+    uint lightning_dmg;
+    uint fire_dmg;
+    uint frost_dmg;
+    uint poison_dmg;
+    uint magic_dmg;
+    uint nuclear_dmg;
+    uint divine_dmg;
+    uint profane_dmg;
+};
 
-    int lightning_damage;
-    int fire_damage;
-    int frost_damage;
-    int Poison_damage;
-    int magic_damage;
-    int nuclear_damage;
+class Defense {
+  public:
+    Defense(uint sl=100, uint pe=100, uint bl=100,
+            uint lt=100, uint fi=100, uint fo=100,
+            uint po=100, uint mg=100, uint nc=100,
+            uint di=100, uint pr=100);
+    ~Defense() = default;
+    
+    uint get_slashdef(); 
+    uint get_piercedef();
+    uint get_bluntdef();
+    uint get_lightningdef();
+    uint get_firedef();
+    uint get_frostdef();
+    uint get_poisondef();
+    uint get_magicdef();
+    uint get_nucleardef();
+    uint get_divinedef();
+    uint get_profanedef();
 
-    int divine_damage;
-    int profane_damage;
+    void set_slashdef(uint a); 
+    void set_piercedef(uint a);
+    void set_bluntdef(uint a);
+    void set_lightningdef(uint a);
+    void set_firedef(uint a);
+    void set_frostdef(uint a);
+    void set_poisondef(uint a);
+    void set_magicdef(uint a);
+    void set_nucleardef(uint a);
+    void set_divinedef(uint a);
+    void set_profanedef(uint a);
+
+  private:
+    uint slash_def; 
+    uint pierce_def;
+    uint blunt_def;
+    uint lightning_def;
+    uint fire_def;
+    uint frost_def;
+    uint poison_def;
+    uint magic_def;
+    uint nuclear_def;
+    uint divine_def;
+    uint profane_def;
 };
 
 
 class Parameters {
   public:
-    Parameters() = default;
-    Parameters(uint lvl);
+    Parameters(uint v,uint w,uint s,uint d,uint i,uint f,uint c,uint l);
     ~Parameters() = default;
 
-    // only the parameters can be updated - everything else depends on the params
-    void level_up(uint v=0, uint w=0, uint s=0, uint d=0, uint i=0, uint f=0, uint c=0, uint l=0);
-    // levels the player based on their pre-disposition to their parameters
-    // void level_up();
+    void take_damage(Defense& victim, Damage& source);
 
-    void take_damage(Damage* source) {
-      this->HP -= source->slash_damage;
-      cout << "taken damage: " << this->HP;
-    }
+    void award_xp(Params param, uint xp);
+    uint get_param_level(Params param);
+
+    uint get_maxhp();
+    uint get_maxmp();
+    uint get_maxstam();
+    uint get_maxhunger();
+
+    uint get_movespeed();
+    uint get_composure();
+    uint get_agility();
+    uint get_fortitude();
+    uint get_endurance();
+    uint get_satiety();
+    uint get_bartering();
+    uint get_lore();
+    uint get_stealth();
+
+    void deplete_hp();
+    void deplete_mp();
+    void deplete_stam();
+    void deplete_hunger();
+
+    void recover_hp();
+    void recover_mp();
+    void recover_stam();
+    void recover_hunger();
     
-    void add_xp(uint x) { exp += x; }
-    uint get_xp()       { return exp; }
-    uint get_level()    { return level; }
-
-    // N.B. pararms & attributes don't have getters/setters bc i'm lazy
-    // fuck that!!! so be careful
-    // still, i'll provide an interface for setting custom 
-
+  protected:
     // parameters
-    uint Vitality;
-    uint Willpower;
-    uint Strength;
-    uint Dexterity;
-    uint Intelligence;
-    uint Faith;
-    uint Charisma;
-    uint Luck;
+    uint vitality;
+    uint willpower;
+    uint strength;
+    uint dexterity;
+    uint intelligence;
+    uint faith;
+    uint charisma;
+    uint luck;
     
-    // attributes
-    int TotalHP;      // total health points available
-    int HP;           // current HP
-    int TotalMP;      // total mana points available
-    int MP;           // current MP
-    int TotalStam;    // total stamina available for movements
-    int Stamina;      // current stamina
-
-    int Satiation;    // resistance to starvation
-    int Immunity;     // resistance to status effects
-    int Movespeed;    // move speed when moving forwards/backwards
-    int Movepen;      // move penalty applied when moving backwards
-    int Encumberance; // how much gear you can carry 
-    int Evasion;      // ability to dodge incoming attacks
-    int Poise;        // ability to withstand incoming attacks
-    int Appraisal;    // ability to appraise items & understand their effects
-
-    // physical defenses
-    int SlashDef; 
-    int PierceDef;
-    int BluntDef;
-
-    // elemental defenses
-    int LightningDef;
-    int FireDef;
-    int FrostDef;
-    int PoisonDef;
-    int MagicDef;
-    int NuclearDef;
-
-    // godly defenses
-    int DivineDef;
-    int ProfaneDef;
-
-  private:
-    uint exp;
-    uint exp_last;
-    uint level;
+    // xp is awarded to a parameter for accomplishing a task
+    // relating to said param
+    // level in a stat is determined by a getter function
+    uint vit_xp;
+    uint vit_disposition;
+    uint wpr_xp;
+    uint wpr_disposition;
+    uint str_xp;
+    uint str_disposition;
+    uint dex_xp;
+    uint dex_disposition;
+    uint int_xp;
+    uint int_disposition;
+    uint fai_xp;
+    uint fai_disposition;
+    uint chr_xp;
+    uint chr_disposition;
+    uint lck_xp;
+    uint lck_disposition;
     
-    // based on the current stats, adjust attributes accordingly
-    // used in constructor & on player level up
-    // manual adjustment of enemy attributes is ok
-    void adjust_attr_from_level();
-
-};
-
-
-// status effects shall be initialised in maybe erm
-void Init_Status_Effects(void);
-// and exist in maybe a erm global list so any item, status effect or anything
-// can proc the status effect, grabbing it by name here
-extern unordered_map<string, Status_Effect> STATUS_EFFECTS;
-
-// the status effects will only exist on the player (its easy lol)
-// and exist in a dynamic array where they
-// can easily be taken off on their own during update()
-
-
-class Status_Effect {
-  // how long the status effect lasts
-  uint64 lasts_for;
-
-  const char* name;
-
-  // the different things it effects
-  // a consistent minus of a defense or attribute that lasts for the duration
-  // or a per-second drain of certain attributes for the duration
-  // or a flat decrease in certain attributes that is not dependent on duration
-  
+    // attributes - 0 is bad; max is good
+    uint hp;           // current HP
+    uint mp;           // current MP
+    uint stamina;      // current stamina
+    uint hunger;       // current hunger 
+    
 };
 
 #endif

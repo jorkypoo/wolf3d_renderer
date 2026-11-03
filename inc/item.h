@@ -4,27 +4,16 @@
 #include "param.h"
 
 class Item {
+  private:
+    uint weight;
+    uint value;
+    uint appraisal;
+    std::string name;
+    
   public:
-    Item(const char* n, unsigned w, unsigned v) { name = n; weight = w; value = v; }
+    Item(const char* n, uint w, uint v, uint a) { name = n; weight = w; value = v; appraisal = a; }
     ~Item() = default;
 
-    unsigned weight;
-    unsigned value;
-    const char* name;
-};
-
-class Weapon : public Item {
-  public:
-    Weapon();
-    
-    Damage damage;
-};
-
-class Apparel : public Item {
-  public:
-    Apparel();
-    
-    Parameters param;
-};
+    };
 
 #endif

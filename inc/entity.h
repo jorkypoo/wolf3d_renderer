@@ -21,20 +21,32 @@ extern list<Entity*> ENTITIES;
 
 int Init_Entities(void);
 void Free_Entities(void);
+
+
+// unfortunately, you'll have to make one of these functions for derived classes
+// from entity, as they must call the appropriate constructor
+// i deem that okay and semi modular
 int Add_Entity(const char* entity_lookup_name, const char* tex_lookup_name, v2 p);
 
 
 class Entity {
   public:
-    Sprite* sprite;   // their animated sprite
-    // Parameters param; // their hp, resistances & stuff
-    // Damage damage;    // the type of damage they inflict
-    // ai script
-
-    Entity(Sprite* s, v2 p, v2 d, uint lvl);
+    Entity(std::string path, std::string id, Sprite* s, v2 p, v2 d, double cr, double ir);
     ~Entity();
+    
+    Sprite* sprite;
+    // Parameters param;
+    // Defense defense;
+    // Damage damage;
 
-    void Remove(void);
+    virtual void update() { return; } // called every frame - for ai scripts, if any
+    // virtual void on_collision() { return; } // called on collision with the player
+    // virtual void on_interaction() { return; } // called on interaction with the player
+    virtual void on_removal() { return; } // called when entity is removed - for loot drops
+
+    // remove a sprite from the ENTITIES list and free it's data
+    // this needs to integrate with a call deferred system
+    void remove(void);
 
     void   set_pos(v2 p)  { pos = p; }
     v2     get_pos(void)  { return pos; }
@@ -46,26 +58,32 @@ class Entity {
     double get_dirx(void) { return dir.x; }
     double get_diry(void) { return dir.y; }
 
-    void set_radius(double r) { radius = r; }
-    double get_radius()   { return radius; }
+    void   set_int_radius(double r) { interact_radius = r; }
+    double get_int_radius() { return interact_radius; }
+    void   set_col_radius(double r) { collision_radius = r; }
+    double get_col_radius() { return collision_radius; }
 
     unsigned get_id() { return id; }
     
   private:
     v2 pos;
     v2 dir;
-    double radius;
+    double collision_radius;
+    double interact_radius;
     unsigned id;
 };
+
+
 
 class Sprite {
   public:
     Sprite(Color* tex, unsigned nf, Uint64 ue, int os);
     ~Sprite();
 
-    Color* texture;      // pointer to the texture to render - can be swapped out
+    Color* texture; // pointer to the texture to render - can be swapped out
 
     void update_texture(const char* lookup_name); // search loaded sprites and updates object to use the queried texture
+    Color* get_texture();
     void update_timer(void); // used internally
 
     unsigned get_num_frames();

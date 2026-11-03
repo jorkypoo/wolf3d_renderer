@@ -7,8 +7,6 @@ Player::Player() {
   plane = {0,0.7};
 
   collision_radius = 0.2;
-
-  param = Parameters(1);
 }
 
 Player::Player(double fov) {
@@ -17,8 +15,7 @@ Player::Player(double fov) {
   plane = {0,fov};
 
   collision_radius = 0.2;
-
-  param = Parameters(1);
+  interact_radius = 0.5;
 }
 
 void Player::set_spawn_point(double x, double y) {
@@ -51,20 +48,18 @@ void Player::move(double mov) {
 
   v2 tomov = { dir.x * mov, dir.y * mov };
 
-  pos.x += tomov.x; // Apply X movement first
-
+  pos.x += tomov.x;
   for (Entity* e : ENTITIES) {
     double dx = pos.x - e->get_posx();
     double dy = pos.y - e->get_posy();
     double distSq = SQ(dx) + SQ(dy);
-    double minDist = collision_radius + e->get_radius();
+    double minDist = collision_radius + e->get_col_radius();
 
     if (distSq < minDist * minDist) {
       double dist = sqrt(distSq);
-      if (dist == 0.0f) dist = 0.001f; // Prevent division by zero
+      if (dist == 0.0f) dist = 0.001f;
             
       double overlap = minDist - dist;
-      // Push player away along the X axis
       pos.x += (dx / dist) * overlap; 
     }
   }
@@ -73,21 +68,16 @@ void Player::move(double mov) {
   int cur_y  = (int)pos.y;
 
   if (!GAMEMAP[cur_y * MAPX + next_x].is_air) {
-    if (tomov.x > 0) {
-      // Moving Right: Snap to the left edge of the wall tile
-      pos.x = (double)next_x - collision_radius - 0.001f;
-    } else {
-      // Moving Left: Snap to the right edge of the wall tile
-      pos.x = (double)next_x + 1.0f + collision_radius + 0.001f;
-    }
+    if (tomov.x > 0) pos.x = (double)next_x - collision_radius - 0.001f;
+    else             pos.x = (double)next_x + 1.0f + collision_radius + 0.001f;
   }
 
   pos.y += tomov.y; 
   for (Entity* e : ENTITIES) {
-    double dx = pos.x - e->get_posx(); // Uses the freshly updated pos.x
+    double dx = pos.x - e->get_posx();
     double dy = pos.y - e->get_posy();
     double distSq = SQ(dx) + SQ(dy);
-    double minDist = collision_radius + e->get_radius();
+    double minDist = collision_radius + e->get_col_radius();
 
     if (distSq < minDist * minDist) {
       double dist = sqrt(distSq);
@@ -101,10 +91,7 @@ void Player::move(double mov) {
   int next_y = (int)(pos.y + sign(tomov.y) * collision_radius);
 
   if (!GAMEMAP[next_y * MAPX + cur_x].is_air) {
-    if (tomov.y > 0) {
-      pos.y = (double)next_y - collision_radius - 0.001f;
-    } else if (tomov.y < 0) {
-      pos.y = (double)next_y + 1.0f + collision_radius + 0.001f;
-    }
+    if (tomov.y > 0) pos.y = (double)next_y - collision_radius - 0.001f;
+    else             pos.y = (double)next_y + 1.0f + collision_radius + 0.001f;
   }
 }

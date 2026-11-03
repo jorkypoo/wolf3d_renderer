@@ -9,13 +9,20 @@ list<Entity*> ENTITIES;
 static unsigned _id_num = 1;
 
 
-Entity::Entity(Sprite* sp, v2 p, v2 d, uint lvl) {
+Entity::Entity(std::string path, std::string id, Sprite* sp, v2 p, v2 d, double cr, double ir) {
   sprite = sp;
   id = _id_num++;
   pos = p;
   dir = d;
 
-  // param = Parameters(lvl);
+
+  collision_radius = cr;
+  interact_radius = ir;
+
+  // read json from the path to init the entity
+  // Parameters param = Parameters(path);
+  // Defense defense = Defense(path);
+  // Damage damage = Damage(path);
 }
 
 Entity::~Entity() {
@@ -24,7 +31,8 @@ Entity::~Entity() {
   sprite = nullptr;
 }
 
-void Entity::Remove(void) {
+void Entity::remove(void) {
+  this->on_removal();
   delete this;
 }
 
@@ -37,11 +45,16 @@ int Init_Entities(void) {
 
 void Free_Entities(void) {
   while (!ENTITIES.empty()) {
-    ENTITIES.front()->Remove();
+    ENTITIES.front()->remove();
   }
 }
 
+
 int Add_Entity(const char* entity_lookup_name, const char* tex_lookup_name, v2 p) {
+  // this will be the function called to initialise a basic entity
+  // one without an ai script - so static objects for the most part
+  // later, this function should only allow a path to a json file
+
   if (SPRITES.find(tex_lookup_name) == SPRITES.end()) {
     cout << "Could not initialise entity: %s" << tex_lookup_name << "\n";
     return 0;
@@ -52,8 +65,9 @@ int Add_Entity(const char* entity_lookup_name, const char* tex_lookup_name, v2 p
   Sprite* dest = new Sprite(t.tex, t.num_frames, t.update_every, t.oneshot);
 
   // look up the correct entity params and stuff to initialise w/ constructor
-  Entity* e = new Entity(dest, p, {0,0}, 1);
-  e->set_radius(0.2);
+  std::string entity_param_path = "example/path.json";
+  std::string entity_param_id   = "example_name";
+  Entity* e = new Entity(entity_param_path, entity_param_id, dest, p, {1,0}, 0.2, 0.5);
   ENTITIES.push_back(e);
 
   return 1;

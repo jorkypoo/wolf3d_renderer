@@ -41,15 +41,9 @@ class Player {
     v2 dir;
     v2 plane;
     double collision_radius;
+    double interact_radius;
 
   public:
-    Parameters param;
-    // vector<Status_Effect>
-    // 
-    // inventory comp
-    // hand comp
-    // hand comp
-
     Player();
     ~Player() = default;
     Player(double fov); 
@@ -65,7 +59,9 @@ class Player {
     double get_planex() { return plane.x; }
     double get_planey() { return plane.y; }
     v2 get_plane()      { return plane; }
-    double get_collision_radius() { return collision_radius; }
+
+    double get_col_radius() { return collision_radius; }
+    double get_int_radius() { return interact_radius; }
 
     void rotate(double rot);
     void move(double mov);
