@@ -1,4 +1,4 @@
-#include "../inc/param.h"
+#include "param.h"
 
 // because the library is dealing with unsigned integers, i should
 // at least be extra extra safe

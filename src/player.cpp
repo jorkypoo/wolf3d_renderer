@@ -1,5 +1,5 @@
-#include "../inc/game.h"
-#include "../inc/entity.h"
+#include "game.h"
+#include "entity.h"
 
 Player::Player() {
   pos = {0,0};

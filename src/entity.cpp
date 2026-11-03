@@ -1,5 +1,5 @@
-#include "../inc/entity.h"
-#include "../inc/entity_textures.h"
+#include "entity.h"
+#include "entity_textures.h"
 
 // logging tool or,
 #include <iostream>

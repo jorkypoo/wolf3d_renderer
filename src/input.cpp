@@ -1,5 +1,5 @@
-#include "../inc/gameloop.h"
-#include "../inc/entity.h"
+#include "gameloop.h"
+#include "entity.h"
 
 void Input(Game_Manager* Game) {
   const double rotspeed = 2.8 * Game->get_delta();

@@ -5,12 +5,12 @@
 #define STBI_NO_GIF
 #define STBI_NO_HDR
 #define STBI_NO_PIC
-#include "../inc/thirdparty/stb_image.h"
+#include "thirdparty/stb_image.h"
 
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
-#include "../inc/thirdparty/stb_image_resize2.h"
+#include "thirdparty/stb_image_resize2.h"
 
-#include "../inc/image_load.h"
+#include "image_load.h"
 
 
 // a last resort if the image cannot be read by stb_image or resized by stb_image_resize2

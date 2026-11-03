@@ -1,4 +1,4 @@
-#include "../inc/item.h"
+#include "item.h"
 
 Item::Item(std::string n, uint w, uint v, uint a) {
   name = n;

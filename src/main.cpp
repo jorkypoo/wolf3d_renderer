@@ -1,12 +1,12 @@
 #include <iostream>
 using namespace std;
 
-#include "../inc/def.h"
-#include "../inc/game.h"
-#include "../inc/gameloop.h"
-#include "../inc/map.h"
-#include "../inc/entity.h"
-#include "../inc/entity_textures.h"
+#include "def.h"
+#include "game.h"
+#include "gameloop.h"
+#include "map.h"
+#include "entity.h"
+#include "entity_textures.h"
 
 
 char WINDOWNAME[] = "Wolf3D in C++";

@@ -1,4 +1,4 @@
-#include "../inc/map.h"
+#include "map.h"
 
 #define sq(n) (n*n)
 

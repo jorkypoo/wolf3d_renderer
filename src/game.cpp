@@ -1,4 +1,4 @@
-#include "../inc/game.h"
+#include "game.h"
 
 Game_Manager::Game_Manager(Player* p) {
   window   = nullptr;

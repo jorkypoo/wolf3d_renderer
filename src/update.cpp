@@ -1,5 +1,5 @@
-#include "../inc/gameloop.h"
-#include "../inc/entity.h"
+#include "gameloop.h"
+#include "entity.h"
 
 #include <iostream>
 

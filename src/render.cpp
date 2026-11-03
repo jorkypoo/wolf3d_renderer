@@ -1,8 +1,8 @@
-#include "../inc/gameloop.h"
-#include "../inc/draw.h"
+#include "gameloop.h"
+#include "draw.h"
 // #include "../inc/map_textures.h"
-#include "../inc/entity.h"
-#include "../inc/map.h"
+#include "entity.h"
+#include "map.h"
 
 // macros now, and can later be put as settings
 // no idea if these can be hotswitched
