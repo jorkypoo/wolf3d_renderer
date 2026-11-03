@@ -55,6 +55,10 @@ Parameters::Parameters(uint v,uint w,uint s,uint d,uint i,uint f,uint c,uint l)
   mp_accumulator = 0;
 }
 
+void Parameters::take_damage(Defense& victim, Damage& source) {
+  ;
+}
+
 void Parameters::award_xp(Params param, uint xp) {
   switch (param) {
     case vit:
@@ -129,6 +133,7 @@ uint Parameters::get_maxstam() {
 uint Parameters::get_maxhunger() {
   return (vitality * 5) + (willpower * 5) + 90;
 }
+
 double Parameters::get_movespeed() {
   return (dexterity * 0.08) + 2.4;
 }
@@ -156,6 +161,7 @@ uint Parameters::get_lore() {
 uint Parameters::get_stealth() {
   return (dexterity * 5) + (willpower * 2) - (strength * 2);
 }
+
 void Parameters::recover_hp(uint amt) {
   hp = std::min(hp+amt, get_maxhp());
 }
@@ -174,10 +180,11 @@ void Parameters::recover_stam(long double delta) {
     stamina = std::min(++stamina, get_maxstam());
     stamina_accumulator -= 1.0L;
   }
- }
+}
 void Parameters::recover_hunger(uint amt) {
    hunger = std::min(hunger+amt, get_maxhunger());
- }
+}
+
 void Parameters::deplete_hp(uint amt) {
   hp = sub_will_underflow(hp,amt) ? 0 : hp - amt;
 }
