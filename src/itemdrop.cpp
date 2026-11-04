@@ -35,7 +35,7 @@ Item_Drop::~Item_Drop() {
 // }
 
 void Item_Drop::update(const Game_Manager* game) {
-  std::cout<<"hi from item drop! auau\n";
+  // std::cout<<"hi from item drop! auau\n";
 }
 
 void Item_Drop::add_items(std::initializer_list<Item*> drops) {
