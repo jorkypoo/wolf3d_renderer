@@ -34,7 +34,7 @@ Item_Drop::~Item_Drop() {
 //       items.push_back(i);
 // }
 
-void Item_Drop::update() {
+void Item_Drop::update(const Game_Manager* game) {
   std::cout<<"hi from item drop! auau\n";
 }
 

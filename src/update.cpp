@@ -30,7 +30,7 @@ void Update(Game_Manager* Game) {
   // update entity ai
   for (Entity* cur : ENTITIES) {
     // cout << "Entity " << cur->get_id() << ": " << cur->param.HP << "\n";
-    cur->update();
+    cur->update(Game);
   }
 
   // update player sprites

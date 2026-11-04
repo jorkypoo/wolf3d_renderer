@@ -35,7 +35,7 @@ class Entity {
     Defense defense;
     Damage damage;
 
-    virtual void update() { return; } // called every frame - for ai scripts, if any
+    virtual void update(const Game_Manager* game) { return; } // called every frame - for ai scripts, if any
     virtual void on_collision() { return; } // called on collision with the player
     virtual void on_interaction() { return; } // called on interaction with the player
     virtual void on_removal() { return; } // called when entity is removed - for loot drops
