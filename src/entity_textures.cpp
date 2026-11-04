@@ -17,7 +17,7 @@ int Init_Sprites(void) {
   SPRITES["assets/barrel.png"] = {0, "assets/barrel.png", 0, 0, 0};
   // if the sprite is static (only 1 frame - so num_frames is specified as 0) we gotta add 1 to the below statement
   // most reusable way to do this ermmm. its just hard coded now bc im lazy
-  SPRITES["assets/barrel.png"].tex = new Color[sq(TEXSIZE) * (SPRITES["assets/barrel.png"].num_frames+1)];
+  SPRITES["assets/barrel.png"].tex = new Color[sq(TEXSIZE)];
   load_image_to_buff("assets/barrel.png",SPRITES["assets/barrel.png"].tex,TEXSIZE,TEXSIZE);
 
   // an animated sprite
@@ -29,6 +29,11 @@ int Init_Sprites(void) {
   // unsigned offset = i * sq(TEXSIZE) - first 
   load_image_to_buff("assets/yuki1a.png",SPRITES["assets/hourai.png"].tex,            TEXSIZE,TEXSIZE);
   load_image_to_buff("assets/yuki2a.png",SPRITES["assets/hourai.png"].tex+sq(TEXSIZE),TEXSIZE,TEXSIZE);
+
+  // an item drop example
+  SPRITES["assets/itemdrop.png"] = {0, "assets/itemdrop.png", 0, 0, 0};
+  SPRITES["assets/itemdrop.png"].tex = new Color[sq(TEXSIZE)];
+  load_image_to_buff("assets/itemdrop.png", SPRITES["assets/itemdrop.png"].tex, TEXSIZE, TEXSIZE);
 
   return 1;
 }

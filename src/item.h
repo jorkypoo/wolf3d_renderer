@@ -26,7 +26,7 @@ const int num_hands = 2;
 class Item {
   public:
     Item(std::string n, uint w, uint v, uint a);
-    ~Item() = default;
+    virtual ~Item() = default;
 
     virtual void mod_param(Parameters& p) { return; } 
     virtual void unmod_param(Parameters& p) { return; } 

@@ -49,7 +49,38 @@ Parameters::Parameters(uint v,uint w,uint s,uint d,uint i,uint f,uint c,uint l)
   mp = get_maxmp();
   stamina = get_maxstam();
   hunger = get_maxhunger();
-  
+
+  hunger_accumulator = 0;
+  stamina_accumulator = 0;
+  mp_accumulator = 0;
+}
+
+Parameters::Parameters() {
+  const int disposition_bonus = 3;
+
+  vitality = 1;
+  willpower = 1;
+  strength = 1;
+  dexterity = 1;
+  intelligence = 1;
+  faith = 1;
+  charisma = 1;
+  luck = 1;
+
+  vit_xp = 0; vit_disp = disposition_bonus;
+  wpr_xp = 0; wpr_disp = disposition_bonus;
+  str_xp = 0; str_disp = disposition_bonus;
+  dex_xp = 0; dex_disp = disposition_bonus;
+  int_xp = 0; int_disp = disposition_bonus;
+  fai_xp = 0; fai_disp = disposition_bonus;
+  chr_xp = 0; chr_disp = disposition_bonus;
+  lck_xp = 0; lck_disp = disposition_bonus;
+
+  hp = get_maxhp();
+  mp = get_maxmp();
+  stamina = get_maxstam();
+  hunger = get_maxhunger();
+
   hunger_accumulator = 0;
   stamina_accumulator = 0;
   mp_accumulator = 0;

@@ -15,14 +15,14 @@ Entity::Entity(std::string path, std::string id, Sprite* sp, v2 p, v2 d, double 
   pos = p;
   dir = d;
 
-
   collision_radius = cr;
   interact_radius = ir;
 
-  // read json from the path to init the entity
-  // Parameters param = Parameters(path);
-  // Defense defense = Defense(path);
-  // Damage damage = Damage(path);
+  // read json from the path to init the entity here
+  // butttt... i'll just hard code it
+  Parameters param = Parameters(1,1,1,1,1,1,1,1);
+  Defense defense = Defense();
+  Damage damage = Damage();
 }
 
 Entity::~Entity() {
@@ -56,7 +56,7 @@ int Add_Entity(const char* entity_lookup_name, const char* tex_lookup_name, v2 p
   // later, this function should only allow a path to a json file
 
   if (SPRITES.find(tex_lookup_name) == SPRITES.end()) {
-    cout << "Could not initialise entity: %s" << tex_lookup_name << "\n";
+    cout << "could not initialise entity: " << tex_lookup_name << "\n";
     return 0;
   }
   

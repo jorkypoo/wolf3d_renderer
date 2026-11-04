@@ -3,7 +3,10 @@ i plan for it to be modular with a custom map maker
 no idea what the genre/theme of the game will be - that'll come later
 
 todo:
-- everything
+- items, item drops, inventory
+- weapons, apparel, potions and scrolls (haven't thought this out)
+- item drop rendering
+- weapon rendering
 
 dependencies:
 - SDL3 (see if its possible to add the library directly in the codebase???)

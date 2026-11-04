@@ -82,7 +82,7 @@ inline uint total_xp_rq(uint lvl) {
 
 class Damage {
   public:
-    Damage(PhysicalDamages param1, uint dmg1, ElementalDamages param2, uint dmg2);
+    Damage(PhysicalDamages param1=nophys, uint dmg1=0, ElementalDamages param2=noelm, uint dmg2=0);
     ~Damage() = default;
 
     uint get_slashdmg(); 
@@ -172,6 +172,7 @@ class Defense {
 
 class Parameters {
   public:
+    Parameters();
     Parameters(uint v,uint w,uint s,uint d,uint i,uint f,uint c,uint l);
     ~Parameters() = default;
 

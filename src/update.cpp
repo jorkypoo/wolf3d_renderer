@@ -1,7 +1,7 @@
 #include "gameloop.h"
 #include "entity.h"
 
-#include <iostream>
+// #include <iostream>
 
 void Update(Game_Manager* Game) {
   // update player timers
@@ -14,10 +14,17 @@ void Update(Game_Manager* Game) {
     // if is colliding(Game->player->get_pos(), Game->player->get_coll(), cur->get_pos(), cur->get_coll())
     // Game->player->param.take_damage(cur->damage);
     if (is_colliding(Game->player->get_pos(), Game->player->get_col_radius(),
-                     cur->get_pos(),          cur->get_col_radius())) {
-      
+                     cur->get_pos(), cur->get_col_radius()))
+    {
+      cur->on_collision();
     }
     
+    if (is_colliding(Game->player->get_pos(), Game->player->get_int_radius(),
+                     cur->get_pos(), cur->get_int_radius()))
+    {
+      cur->on_interaction();
+    }
+
   }
 
   // update entity ai

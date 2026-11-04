@@ -4,24 +4,26 @@
 #include <vector>
 #include <initializer_list>
 #include "item.h"
+#include "entity.h"
+#include "entity_textures.h"
 
-class Item_Drop {
+int Add_ItemDrop(std::initializer_list<Item*> is, v2 p);
+
+class Item_Drop : public Entity {
   public:
-    unsigned* texture;
-    Item_Drop() {;}
-    Item_Drop(std::initializer_list<Item*> itms) { for (Item* i : itms) if (i != nullptr) items.push_back(i); }
-    // ~Item_Drop() { for (Item* i : items) if (i != nullptr) delete i; }
-
-    void add_items(std::initializer_list<Item*> drops) {
-      for (Item* i : drops) if (i != nullptr) items.push_back(i);
+    Item_Drop(std::string path, std::string id, Sprite* s, std::initializer_list<Item*> itms, v2 p):
+    Entity(path, id, s, p, {0,0}, 0.0, 0.5) {
+      for (Item* i : itms)
+        if (i != nullptr) items.push_back(i);
     }
+    ~Item_Drop();
 
-    // assumed to be cleaned up in player's pickup
-    std::vector<Item*>& get_items() { return items; }
+    virtual void update();
+
+    void add_items(std::initializer_list<Item*> drops);
+    std::vector<Item*>& get_items();
 
   private:
-    // v2 pos;
-    // double radius;
     std::vector<Item*> items;
 };
 

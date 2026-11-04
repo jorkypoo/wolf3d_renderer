@@ -1,5 +1,6 @@
 #include "gameloop.h"
 #include "entity.h"
+#include "itemdrop.h"
 
 void Input(Game_Manager* Game) {
   const double rotspeed = 2.8 * Game->get_delta();
@@ -28,6 +29,7 @@ void Input(Game_Manager* Game) {
             Game->set_running_state(0);
             break;
           case SDLK_F2:
+            Add_ItemDrop({}, {2,3});
             break;
         } // e.key.key
     } // e.type

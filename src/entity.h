@@ -2,13 +2,10 @@
 #define _ENTITY_
 
 #include <list>
-using namespace std;
-
 #include <SDL3/SDL.h> // SDL_GetTicksNS() & type Uint64
-
+#include "game.h"
 #include "def.h"
 #include "mathutils.h"
-
 #include "param.h"
 
 class Sprite;
@@ -17,11 +14,10 @@ class Entity;
 // global linked list of all objects (static & scripted/animated)
 // entities ai scripts & timers updated in update() via this list
 // and their sprite rendered in render() too
-extern list<Entity*> ENTITIES;
+extern std::list<Entity*> ENTITIES;
 
 int Init_Entities(void);
 void Free_Entities(void);
-
 
 // unfortunately, you'll have to make one of these functions for derived classes
 // from entity, as they must call the appropriate constructor
@@ -32,16 +28,16 @@ int Add_Entity(const char* entity_lookup_name, const char* tex_lookup_name, v2 p
 class Entity {
   public:
     Entity(std::string path, std::string id, Sprite* s, v2 p, v2 d, double cr, double ir);
-    ~Entity();
+    virtual ~Entity();
     
     Sprite* sprite;
-    // Parameters param;
-    // Defense defense;
-    // Damage damage;
+    Parameters param;
+    Defense defense;
+    Damage damage;
 
     virtual void update() { return; } // called every frame - for ai scripts, if any
-    // virtual void on_collision() { return; } // called on collision with the player
-    // virtual void on_interaction() { return; } // called on interaction with the player
+    virtual void on_collision() { return; } // called on collision with the player
+    virtual void on_interaction() { return; } // called on interaction with the player
     virtual void on_removal() { return; } // called when entity is removed - for loot drops
 
     // remove a sprite from the ENTITIES list and free it's data
