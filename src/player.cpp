@@ -50,16 +50,18 @@ void Player::move(double mov) {
 
   pos.x += tomov.x;
   for (Entity* e : ENTITIES) {
+    if (e->get_col_radius() == 0.0) continue;
+
     double dx = pos.x - e->get_posx();
     double dy = pos.y - e->get_posy();
     double distSq = SQ(dx) + SQ(dy);
-    double minDist = collision_radius + e->get_col_radius();
+    double min_dist = collision_radius + e->get_col_radius();
 
-    if (distSq < minDist * minDist) {
+    if (distSq < min_dist * min_dist) {
       double dist = sqrt(distSq);
       if (dist == 0.0f) dist = 0.001f;
             
-      double overlap = minDist - dist;
+      double overlap = min_dist - dist;
       pos.x += (dx / dist) * overlap; 
     }
   }
@@ -74,15 +76,17 @@ void Player::move(double mov) {
 
   pos.y += tomov.y; 
   for (Entity* e : ENTITIES) {
+    if (e->get_col_radius() == 0.0) continue;
+
     double dx = pos.x - e->get_posx();
     double dy = pos.y - e->get_posy();
     double distSq = SQ(dx) + SQ(dy);
-    double minDist = collision_radius + e->get_col_radius();
+    double min_dist = collision_radius + e->get_col_radius();
 
-    if (distSq < minDist * minDist) {
+    if (distSq < min_dist * min_dist) {
       double dist = sqrt(distSq);
       if (dist == 0.0f) dist = 0.001f;
-      double overlap = minDist - dist;
+      double overlap = min_dist - dist;
       pos.y += (dy / dist) * overlap; 
     }
   }
