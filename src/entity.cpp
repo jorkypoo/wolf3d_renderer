@@ -59,6 +59,7 @@ void Free_Entities(void) {
 
 void Deferred_Remove_Entities(void) {
   // i hate c++ sometimes, look at this neat segfault: for (Entity* i : ENTITIES) if (i->set_for_removal()) delete i;
+  // YOU'RE HIDING SHIT FROM MEEEEEEEEEEEEEEEEe
   auto i = ENTITIES.begin();
   while (i != ENTITIES.end()) {
     // i really hate c++ this is dumb

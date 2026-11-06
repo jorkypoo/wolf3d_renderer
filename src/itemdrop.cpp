@@ -22,10 +22,14 @@ int Add_ItemDrop(std::initializer_list<Item*> is, v2 p) {
 
 Item_Drop::~Item_Drop() {
   // errors may occur here if player's pick up item drop code is fucky
-  for (Item* i : items)
-    if (i != nullptr)
-      // std::cout<<"deleting "<<i->get_name()<<std::endl;
-      delete i;
+  auto i = items.begin();
+  while (i != items.end()) {
+    if ((*i) != nullptr) {
+      delete (*i);
+      i = items.erase(i);
+    }
+  }
+
 }
 
 // Item_Drop::Item_Drop(std::initializer_list<Item*> itms, v2 p) {
