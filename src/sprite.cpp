@@ -1,5 +1,4 @@
 #include "entity.h"
-#include "entity_textures.h"
 
 Sprite::Sprite(Color* tex, unsigned nf, Uint64 ue, int os) {
   if (tex) texture = tex;

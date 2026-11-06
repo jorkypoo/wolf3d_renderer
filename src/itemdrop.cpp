@@ -1,7 +1,7 @@
 #include "itemdrop.h"
 // #include <iostream>
 
-int Add_ItemDrop(std::initializer_list<Item*> is, v2 p) {
+int add_itemdrop(std::initializer_list<Item*> is, v2 p) {
   if (SPRITES.find("assets/itemdrop.png") == SPRITES.end()) {
     cout << "could not initialise itemdrop: assets/itemdrop.png missing\n";
     return 0;

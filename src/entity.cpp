@@ -1,5 +1,4 @@
 #include "entity.h"
-#include "entity_textures.h"
 
 // logging tool or,
 #include <iostream>
@@ -11,7 +10,7 @@ static unsigned _id_num = 1;
 
 Entity::Entity(std::string path, std::string id, Sprite* sp, v2 p, v2 d, double cr, double ir) {
   sprite = sp;
-  id = _id_num++;
+  id = ++_id_num;
   pos = p;
   dir = d;
   to_remove = 0;
@@ -43,8 +42,8 @@ int Entity::set_for_removal(void) {
 
 int Init_Entities(void) {
   // Add_Entity("yuki-onna", "SPRITES lookup name - not file name", pos);
-  Add_Entity("not ready", "assets/hourai.png", {3,3});
-  Add_Entity("not ready", "assets/barrel.png", {5,5});
+  add_entity("json_path", "json_id", "assets/hourai.png", {3,3});
+  add_entity("json_path", "json_id", "assets/barrel.png", {5,5});
 
   return 1;
 }
@@ -72,7 +71,7 @@ void Deferred_Remove_Entities(void) {
   }
 }
 
-int Add_Entity(const char* entity_lookup_name, const char* tex_lookup_name, v2 p) {
+int add_entity(std::string json_path, std::string json_id, std::string tex_lookup_name, v2 p) {
   // this will be the function called to initialise a basic entity
   // one without an ai script - so static objects for the most part
   // later, this function should only allow a path to a json file

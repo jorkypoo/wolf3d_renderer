@@ -1,12 +1,25 @@
+/*
+ * contains the base Entity class: any object - static or otherwise -
+ * that may exist in the game map and be rendered
+ *
+ * also contains classes derived from entity, such as item drops,
+ * enemy ai with custom update functions() and others
+ *
+ */
+
 #ifndef _ENTITY_
 #define _ENTITY_
 
 #include <list>
+#include <vector>
+#include <initializer_list> // item drops
 #include <SDL3/SDL.h> // SDL_GetTicksNS() & type Uint64
 #include "game.h"
 #include "def.h"
 #include "mathutils.h"
 #include "param.h"
+#include "item.h"
+#include "entity_textures.h"
 
 class Sprite;
 class Entity;
@@ -23,12 +36,19 @@ void Deferred_Remove_Entities(void);
 // unfortunately, you'll have to make one of these functions for derived classes
 // from entity, as they must call the appropriate constructor
 // i deem that okay and semi modular
-int Add_Entity(const char* entity_lookup_name, const char* tex_lookup_name, v2 p);
+//
+// add entity requires parameters, defense & attack values, and more, hence the
+// json file path
+int add_entity(std::string json_path, std::string json_id, std::string tex_lookup_name, v2 p);
+int add_itemdrop(std::initializer_list<Item*> is, v2 p);
 
+// =============================
+// ===== class definitions =====
+// =============================
 
 class Entity {
   public:
-    Entity(std::string path, std::string id, Sprite* s, v2 p, v2 d, double cr, double ir);
+    Entity(std::string json_path, std::string json_id, Sprite* s, v2 p, v2 d, double cr, double ir);
     virtual ~Entity();
     
     Sprite* sprite;
@@ -72,7 +92,24 @@ class Entity {
     unsigned id;
 };
 
+class Item_Drop : public Entity {
+  public:
+    Item_Drop(std::string path, std::string id, Sprite* s, std::initializer_list<Item*> itms, v2 p):
+    Entity(path, id, s, p, {0,0}, 0.0, 0.5) {
+      for (Item* i : itms)
+        if (i != nullptr) items.push_back(i);
+    }
+    ~Item_Drop();
 
+    virtual void update(const Game_Manager* game);
+    virtual void on_interaction(const Game_Manager* game);
+
+    void add_items(std::initializer_list<Item*> drops);
+    std::vector<Item*>& get_items();
+
+  private:
+    std::vector<Item*> items;
+};
 
 class Sprite {
   public:
