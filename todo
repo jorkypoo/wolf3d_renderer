@@ -2,13 +2,13 @@ a few things RE FLOOR_RENDERING in render.cpp must be filled out; specifically, 
 game must provide a ceiling/floor colour for each level, or a default if none was provided
 this mostly depends on how levels are structured
 
-consider shifting item drops and all further entity declarations into entity.h for conciseness
-but put the definitions in their own source files
-
 sprites aren't being rendered on y = PIXELY-1
 nor the sides of the screen x = 0 & x = PIXELX-1
 
 add a timer library that lets you do stuff like
 EVERY_MS(500) which is probably just a modulo under the hood
 
-make a call deferred system for stuff, such as removing entities
+a weapons texture buffer - for all the weapons that may be equipped
+buuuuut the sprite frames already kinda does this... right?
+what if the weapons had...animated sprites... sigh
+its kinda baked into entity.h
