@@ -33,6 +33,7 @@ int main(int argv, char** argc) {
     Input(&Game);
     Update(&Game);
     Render(&Game);
+    Deferred_Remove_Entities();
     Game.calculate_fps();
   }
 

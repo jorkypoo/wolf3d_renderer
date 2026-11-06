@@ -16,13 +16,13 @@ void Update(Game_Manager* Game) {
     if (is_colliding(Game->player->get_pos(), Game->player->get_col_radius(),
                      cur->get_pos(), cur->get_col_radius()))
     {
-      cur->on_collision();
+      cur->on_collision(Game);
     }
     
     if (is_colliding(Game->player->get_pos(), Game->player->get_int_radius(),
                      cur->get_pos(), cur->get_int_radius()))
     {
-      cur->on_interaction();
+      cur->on_interaction(Game);
     }
 
   }

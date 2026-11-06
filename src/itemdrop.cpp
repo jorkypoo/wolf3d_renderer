@@ -38,9 +38,10 @@ void Item_Drop::update(const Game_Manager* game) {
   // std::cout<<"hi from item drop! auau\n";
 }
 
-// void Item_Drop::on_interaction() {
-  
-// }
+void Item_Drop::on_interaction(const Game_Manager* game) {
+  // game->player->pickup(this->get_items());
+  this->remove();
+}
 
 void Item_Drop::add_items(std::initializer_list<Item*> drops) {
   for (Item* i : drops) if (i != nullptr) items.push_back(i);

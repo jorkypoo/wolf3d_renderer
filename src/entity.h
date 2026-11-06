@@ -18,6 +18,7 @@ extern std::list<Entity*> ENTITIES;
 
 int Init_Entities(void);
 void Free_Entities(void);
+void Deferred_Remove_Entities(void);
 
 // unfortunately, you'll have to make one of these functions for derived classes
 // from entity, as they must call the appropriate constructor
@@ -36,13 +37,14 @@ class Entity {
     Damage damage;
 
     virtual void update(const Game_Manager* game) { return; } // called every frame - for ai scripts, if any
-    virtual void on_collision() { return; } // called on collision with the player
-    virtual void on_interaction() { return; } // called on interaction with the player
+    virtual void on_collision(const Game_Manager* game) { return; } // called on collision with the player
+    virtual void on_interaction(const Game_Manager* game) { return; } // called on interaction with the player
     virtual void on_removal() { return; } // called when entity is removed - for loot drops
 
     // remove a sprite from the ENTITIES list and free it's data
-    // this needs to integrate with a call deferred system
+    // defers the removal to the end of the frame to avoid errors removing mid-frame
     void remove(void);
+    int  set_for_removal(void); // for use in Deferred_Remove_Entities()
 
     void   set_pos(v2 p)  { pos = p; }
     v2     get_pos(void)  { return pos; }
@@ -62,6 +64,7 @@ class Entity {
     unsigned get_id() { return id; }
     
   private:
+    int to_remove; // flags entity to be removed from the game at the end of the frame
     v2 pos;
     v2 dir;
     double collision_radius;

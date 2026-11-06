@@ -14,7 +14,8 @@ Entity::Entity(std::string path, std::string id, Sprite* sp, v2 p, v2 d, double 
   id = _id_num++;
   pos = p;
   dir = d;
-
+  to_remove = 0;
+  
   collision_radius = cr;
   interact_radius = ir;
 
@@ -26,17 +27,22 @@ Entity::Entity(std::string path, std::string id, Sprite* sp, v2 p, v2 d, double 
 }
 
 Entity::~Entity() {
-  ENTITIES.remove(this);
+  this->on_removal();
+
   delete sprite;
   sprite = nullptr;
 }
 
 void Entity::remove(void) {
-  this->on_removal();
-  delete this;
+  this->to_remove = 1;
+}
+
+int Entity::set_for_removal(void) {
+  return to_remove;
 }
 
 int Init_Entities(void) {
+  // Add_Entity("yuki-onna", "SPRITES lookup name - not file name", pos);
   Add_Entity("not ready", "assets/hourai.png", {3,3});
   Add_Entity("not ready", "assets/barrel.png", {5,5});
 
@@ -44,11 +50,26 @@ int Init_Entities(void) {
 }
 
 void Free_Entities(void) {
-  while (!ENTITIES.empty()) {
-    ENTITIES.front()->remove();
+  auto i = ENTITIES.begin();
+  while (i != ENTITIES.end()) {
+    delete *i;
+    i = ENTITIES.erase(i);
   }
 }
 
+void Deferred_Remove_Entities(void) {
+  // i hate c++ sometimes, look at this neat segfault: for (Entity* i : ENTITIES) if (i->set_for_removal()) delete i;
+  auto i = ENTITIES.begin();
+  while (i != ENTITIES.end()) {
+    // i really hate c++ this is dumb
+    if ((*i)->set_for_removal()) { // if entity must be removed
+      delete *i;
+      i = ENTITIES.erase(i);
+    } else {                       // else, continue
+      i++;
+    }
+  }
+}
 
 int Add_Entity(const char* entity_lookup_name, const char* tex_lookup_name, v2 p) {
   // this will be the function called to initialise a basic entity

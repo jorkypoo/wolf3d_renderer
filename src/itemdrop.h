@@ -19,6 +19,7 @@ class Item_Drop : public Entity {
     ~Item_Drop();
 
     virtual void update(const Game_Manager* game);
+    virtual void on_interaction(const Game_Manager* game);
 
     void add_items(std::initializer_list<Item*> drops);
     std::vector<Item*>& get_items();
