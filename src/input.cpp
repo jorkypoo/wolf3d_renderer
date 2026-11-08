@@ -5,7 +5,7 @@ void Input(Game_Manager* Game) {
   const double rotspeed = 2.8 * Game->get_delta();
   const double movspeed = 2.5 * Game->get_delta();
   // const double movspeed = Game->player->param.get_movespeed() * Game->get_delta();
-  const double mov_penalty = 0.8;
+  const double mov_penalty = 0.6;
   // const double mov_penality = Game->player->get_movepenalty();
 
   SDL_Event e;
@@ -45,20 +45,30 @@ void Input(Game_Manager* Game) {
     Game->player->rotate(+rotspeed);
 
   // moving players position
-  if (ks[SDL_SCANCODE_UP]) 
+  if (ks[SDL_SCANCODE_UP])
     Game->player->move(movspeed);
-  if (ks[SDL_SCANCODE_DOWN]) 
+  if (ks[SDL_SCANCODE_DOWN])
     Game->player->move(-movspeed * mov_penalty);
-  
 
-  // shooting and menu stuff
-  if (ks[SDL_SCANCODE_Z]) {
+
+  if (ks[SDL_SCANCODE_Z]) { // right main
+    Game->player->hand_attack_main(righthand);
+  } else {
     ;
   }
-  if (ks[SDL_SCANCODE_X]) {
+  if (ks[SDL_SCANCODE_X]) { // right alt
+    Game->player->hand_attack_alt(righthand);
+  } else {
     ;
   }
-  if (ks[SDL_SCANCODE_C]) {
+  if (ks[SDL_SCANCODE_SPACE]) { // left main
+    Game->player->hand_attack_main(lefthand);
+  } else {
+    ;
+  }
+  if (ks[SDL_SCANCODE_LSHIFT]) { // left alt
+    Game->player->hand_attack_alt(lefthand);
+  } else {
     ;
   }
 }

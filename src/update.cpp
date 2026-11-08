@@ -7,6 +7,7 @@ void Update(Game_Manager* Game) {
   // update player timers
   // for each status effect in player.param.status effects
   // update dat timer
+  
 
   // detect collisions between projectiles
   for (Entity* cur : ENTITIES) {

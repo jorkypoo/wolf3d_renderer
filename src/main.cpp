@@ -1,5 +1,4 @@
 #include <iostream>
-using namespace std;
 
 #include "def.h"
 #include "game.h"
@@ -17,9 +16,10 @@ Game_Manager Game(&player);
 
 int main(int argv, char** argc) {
   if(!Game.Init(WINDOWNAME, WINDOWX, WINDOWY, PIXELX, PIXELY))
-    cout << "erm oh well\n";
+    std::cout << "erm oh well\n";
 
   Game.player->set_spawn_point(1.5, 1.5);
+  // Game.player->hand_attack_main(righthand);
 
   // images are to be loaded into the global texture buffer here
   Init_Global_Textures();
@@ -27,7 +27,7 @@ int main(int argv, char** argc) {
   Init_Entities();
   Init_Map();
   // print_map();
-  
+
 
   while (Game.is_running()) {
     Input(&Game);

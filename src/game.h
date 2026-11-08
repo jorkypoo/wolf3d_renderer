@@ -2,7 +2,7 @@
  * header to provide:
  * the game structure & player,
  * texture structure (the raw image data),
- * the global gamemap & fogmaps/darkmaps, 
+ * the global gamemap & fogmaps/darkmaps,
  * sprite list (animated & not - theyll use the same class),
  * npc/enemy list - theyre separate to sprites
  *
@@ -14,15 +14,14 @@
 #define _WINDOW_
 
 #include <SDL3/SDL.h>
-// #include <stdbool.h> // std is bitchmode for this
 #include <iostream>
-using namespace std;
-
+#include <vector>
+#include <array>
 #include "def.h"
 #include "mathutils.h"
-
 #include "map.h"
 #include "param.h"
+#include "item.h"
 
 
 // ill use this later
@@ -36,20 +35,40 @@ class Game_Manager;
 
 
 class Player {
-  private:
-    v2 pos;
-    v2 dir;
-    v2 plane;
-    double collision_radius;
-    double interact_radius;
-
   public:
     Player();
-    ~Player() = default;
-    Player(double fov); 
+    ~Player();
+    Player(double fov=0.7);
 
+    // inventory methods
+    unsigned inv_size();
+    int inv_has(const Item* i);
+    int inv_get_item_index(const Item* i);
+    void inv_add(std::vector<Item*>& itms);
+    Item* inv_get_from_index(unsigned i);
+    void inv_remove_by_index(unsigned i);
+    void inv_remove_by_item(Item* i);
+
+    // hands methods - weapons
+    void hand_attack_main(Hand h);
+    void hand_attack_alt(Hand h);
+    void hand_equip(Hand h, Weapon* w);
+    void hand_unequip(Hand h);
+    int hand_has(const Item* i);
+    int hand_is_equipped(Hand h);
+    Weapon* hand_get_equipped(Hand h);
+    Color* hand_get_texture(Hand h);
+
+    // body methods - apparel
+    void body_equip(Bodypart b, Apparel* a);
+    void body_unequip(Bodypart b);
+    int body_has(const Item* a);
+    int body_is_equipped(Bodypart b);
+    Apparel* body_get_equipped(Bodypart b);
+
+    // general methods
     void set_spawn_point(double x, double y);
-    
+
     double get_posx() { return pos.x; }
     double get_posy() { return pos.y; }
     v2 get_pos()      { return pos; }
@@ -65,6 +84,20 @@ class Player {
 
     void rotate(double rot);
     void move(double mov);
+
+  private:
+    v2 pos;
+    v2 dir;
+    v2 plane;
+    double collision_radius;
+    double interact_radius;
+
+    Parameters param;
+    Defense defense;
+
+    std::array<Weapon*, num_hands> hands;
+    std::array<Apparel*, num_bodyparts> body;
+    std::vector<Item*> inventory;
 
 };
 
@@ -83,7 +116,7 @@ class Game_Manager {
     Uint64 frame_old;
     Uint64 frame_new;
     Uint64 frame_cnt;
-    
+
   public:
     // windowing variables
     SDL_Window* window;

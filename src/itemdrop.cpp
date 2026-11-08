@@ -1,5 +1,5 @@
-#include "itemdrop.h"
-// #include <iostream>
+#include "item.h"
+#include "entity.h"
 
 int add_itemdrop(std::initializer_list<Item*> is, v2 p) {
   if (SPRITES.find("assets/itemdrop.png") == SPRITES.end()) {

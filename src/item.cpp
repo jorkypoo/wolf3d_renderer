@@ -1,6 +1,6 @@
 #include "item.h"
 
-Item::Item(std::string n, uint w, uint v, uint a) {
+Item::Item(std::string n, uint w, uint v) {
   name = n;
   weight = w;
   value = v;

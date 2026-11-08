@@ -3,6 +3,7 @@ GAME_NAME = main
 
 # flags given to compiler
 CFLAGS = -lSDL3 -lSDL3_image -lSDL3_ttf -lSDL3_mixer -lm -g -Wall -O2
+# -std=c99 & -pedantic
 
 # gives each xyz.c file in SRC a corresponding xyz.o file
 SRC_DIR := $(wildcard src/*.cpp)
