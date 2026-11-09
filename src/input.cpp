@@ -36,7 +36,6 @@ void Input(Game_Manager* Game) {
 
   /* keyboard input */
 
-
   const bool* ks = SDL_GetKeyboardState(NULL);
   // moving players dir
   if (ks[SDL_SCANCODE_RIGHT])
@@ -50,8 +49,11 @@ void Input(Game_Manager* Game) {
   if (ks[SDL_SCANCODE_DOWN])
     Game->player->move(-movspeed * mov_penalty);
 
+  // send the state of the user's input to update their equipped weapons (if any)
+  Game->player->attack_input_state_changed(righthand, ks[SDL_SCANCODE_Z]);
+  Game->player->attack_input_state_changed(lefthand, ks[SDL_SCANCODE_X]);
 
-  if (ks[SDL_SCANCODE_Z]) { // right main
+  /* if (ks[SDL_SCANCODE_Z]) { // right main
     Game->player->hand_attack_main(righthand);
   } else {
     ;
@@ -70,5 +72,5 @@ void Input(Game_Manager* Game) {
     Game->player->hand_attack_alt(lefthand);
   } else {
     ;
-  }
+  } */
 }

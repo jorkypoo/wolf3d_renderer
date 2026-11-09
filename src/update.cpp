@@ -7,7 +7,9 @@ void Update(Game_Manager* Game) {
   // update player timers
   // for each status effect in player.param.status effects
   // update dat timer
-  
+  Game->player->update_attacks();
+  Game->player->update_equipped_weapon_timers();
+
 
   // detect collisions between projectiles
   for (Entity* cur : ENTITIES) {
@@ -15,14 +17,12 @@ void Update(Game_Manager* Game) {
     // if is colliding(Game->player->get_pos(), Game->player->get_coll(), cur->get_pos(), cur->get_coll())
     // Game->player->param.take_damage(cur->damage);
     if (is_colliding(Game->player->get_pos(), Game->player->get_col_radius(),
-                     cur->get_pos(), cur->get_col_radius()))
-    {
+                     cur->get_pos(), cur->get_col_radius())) {
       cur->on_collision(Game);
     }
-    
+
     if (is_colliding(Game->player->get_pos(), Game->player->get_int_radius(),
-                     cur->get_pos(), cur->get_int_radius()))
-    {
+                     cur->get_pos(), cur->get_int_radius())) {
       cur->on_interaction(Game);
     }
 

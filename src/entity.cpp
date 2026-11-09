@@ -14,7 +14,7 @@ Entity::Entity(std::string path, std::string id, Sprite* sp, v2 p, v2 d, double 
   pos = p;
   dir = d;
   to_remove = 0;
-  
+
   collision_radius = cr;
   interact_radius = ir;
 
@@ -80,7 +80,7 @@ int add_entity(std::string json_path, std::string json_id, std::string tex_looku
     cout << "could not initialise entity: " << tex_lookup_name << "\n";
     return 0;
   }
-  
+
   // create the sprite & its texture for the entity
   i_sprite_texture t = SPRITES[tex_lookup_name];
   Sprite* dest = new Sprite(t.tex, t.num_frames, t.update_every, t.oneshot);

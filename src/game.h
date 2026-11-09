@@ -33,7 +33,6 @@ int Init_Game();
 class Player;
 class Game_Manager;
 
-
 class Player {
   public:
     Player();
@@ -84,6 +83,10 @@ class Player {
 
     void rotate(double rot);
     void move(double mov);
+
+    void update_attacks();
+    void attack_input_state_changed(Hand h, bool state);
+    void update_equipped_weapon_timers();
 
   private:
     v2 pos;

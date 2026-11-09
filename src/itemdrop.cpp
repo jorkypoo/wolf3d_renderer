@@ -43,7 +43,7 @@ void Item_Drop::update(const Game_Manager* game) {
 }
 
 void Item_Drop::on_interaction(const Game_Manager* game) {
-  // game->player->pickup(this->get_items());
+  game->player->inv_add(this->get_items());
   this->remove();
 }
 

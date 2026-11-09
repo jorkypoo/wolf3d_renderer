@@ -1,7 +1,7 @@
 /*
  * contains definitions and utilities that the game should
  * draw from; some of which shall be initialised from a file...later
- * 
+ *
  */
 
 #ifndef _DEFINITIONS_
@@ -19,6 +19,8 @@
 #define EQSIZE      (90)
 #define FOGDIST     (15)
 #define OBJ_FOGDIST (15*FOGDIST)
+
+#define NS_IN_MS(ms) (ms * 1000000)
 
 #include <cstdint>
 

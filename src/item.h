@@ -65,13 +65,31 @@ class Item {
 
 class Weapon : public Item {
   public:
-    Weapon(std::string n, std::string lookup, int w, int v,
+    Weapon(std::string n, std::string json_path, std::string json_lookup, int w, int v,
            PhysicalDamages phys=nophys, unsigned pa=0,
            ElementalDamages elm=noelm,  unsigned ea=0) :
     Item(n, w, v) {
       damage = Damage(phys, pa, elm, ea);
-      tex_lookup_name = lookup;
       texture = nullptr;
+      attacking = 0;
+
+      idle_tex_lookup_name = "assets/sword_idle.png";
+      atk_tex_lookup_name = "assets/sword_atk.png";
+
+      // either oneshot or continuous must be set, never both or none
+      oneshot = 1;
+      update = 0;
+      continuous = 0;
+      active = 0;
+      attacking = 0;
+
+      num_frames = 3;
+      update_every = 300;
+
+      // used internally
+      frame_num = 0;
+      timer_time = 0;
+      timer_last_update = 0;
     }
 
     virtual void mod_param(Parameters& p);
@@ -81,21 +99,36 @@ class Weapon : public Item {
     virtual void mod_dmg(Parameters& p);
     virtual void unmod_dmg(Parameters& p);
 
+    virtual void main_ability() { return; }
+    virtual void  alt_ability() { return; }
+    virtual std::string get_name() { return name; }
+
+    Damage damage;
+
     Color* texture;
+
+    std::string idle_tex_lookup_name;
+    std::string atk_tex_lookup_name;
 
     // sorry but i'm making a built in hand texture, just like the C version
     // "wah wah you already did this" idgaffff its fine
     // it won't be a seprate class either, just built into Weapon
     // this also encompasses stuff to tell the weapon when it applies it's damage idkkkk
 
+    int oneshot;    // is it a one-shot weapon animation?
+    int update;     // then it uses this bool var for timers;
+    int continuous; // otherwise, it's a continuous animation,
+    int active;     // and it uses this bool var for timers
 
-    virtual void main_ability() { return; }
-    virtual void  alt_ability() { return; }
-    virtual std::string get_name() { return name; }
+    int attacking;  // used internally kinda - helps set texture only once
 
-  protected:
-    std::string tex_lookup_name;
-    Damage damage;
+    unsigned num_frames; // number of frames for the attack animation
+    uint64 update_every; // how often (in ms) the animation should update
+
+    // used internally for timer stuff
+    unsigned frame_num;
+    uint64 timer_time;
+    uint64 timer_last_update;
 
 };
 

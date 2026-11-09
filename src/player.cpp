@@ -92,13 +92,12 @@ int Player::inv_get_item_index(const Item* i) {
 }
 
 void Player::inv_add(std::vector<Item*>& itms) {
+  std::cout<<"player picked up items drop item drop\n";
   for (Item* i : itms) {
     if (i != nullptr)
       inventory.push_back(i);
   }
   itms.clear();
-  // the drop must be cleared after this function has been called
-  // the drop's items was passed, not hte item drop itself...
 }
 
 Item* Player::inv_get_from_index(unsigned i) {
@@ -120,6 +119,7 @@ void Player::inv_remove_by_item(Item* i) {
   remove_item_from_vector(inventory, i);
   delete i;
 }
+
 
 void Player::hand_attack_main(Hand h) {
   // std::cout<<hands[h]<<std::endl;
@@ -296,4 +296,89 @@ void Player::move(double mov) {
     if (tomov.y > 0) pos.y = (double)next_y - collision_radius - 0.001f;
     else             pos.y = (double)next_y + 1.0f + collision_radius + 0.001f;
   }
+}
+
+void Player::update_attacks() {
+  ;
+}
+
+void Player::attack_input_state_changed(Hand h, bool state) {
+  // here, we read what actions have been pressed by the player during input()
+  // clicking an attack's button activates the one-shot update, if the attack
+  // is a one-shot; it also must be unset after the animation has played
+  //
+  // it also activates the active switch, which is unset when the button has
+  // been unpressed
+
+  if (hands[h] == nullptr) return;
+
+  if (hands[h]->oneshot)
+    hands[h]->update = 1;
+  if (hands[h]->continuous)
+    hands[h]->active = state;
+
+}
+
+void Player::update_equipped_weapon_timers() {
+  for (Weapon* w : hands) {
+    if (w == nullptr) continue;
+    if (w->texture == nullptr) continue;
+
+    if (w->oneshot && w->update) { // it's a one-shot aniamtion - update accordingly
+
+      if (w->attacking == 0) {
+        if (TEXTURES.count(w->atk_tex_lookup_name)) {
+          w->texture = TEXTURES[w->atk_tex_lookup_name];
+        } else {
+          ; // do something idk the texture wasnt found bro
+        }
+        w->attacking = 1;
+      }
+
+      w->timer_time = SDL_GetTicksNS();
+      int should_update = w->timer_time - w->timer_last_update >=
+                          NS_IN_MS(w->update_every);
+
+      if (should_update) {
+        w->frame_num++;
+        std::cout<<"player attacking with weapon\n";
+
+        if (w->frame_num >= w->num_frames) { // animation is complete
+          w->frame_num = 0;
+          w->update = 0;
+
+          // swap back to idle texture
+          w->attacking = 0;
+          w->texture = TEXTURES[w->idle_tex_lookup_name];
+
+        }
+        w->timer_last_update = w->timer_time;
+      }
+    }
+
+    if (w->continuous) { // it's a continuous animation - timers not really needed!
+
+      if (w->active && !w->attacking) {
+        w->attacking = 1; // prevent continuous texture lookup
+        std::cout<<"player blocking\n";
+
+        if (TEXTURES.count(w->atk_tex_lookup_name)) {
+          w->texture = TEXTURES[w->atk_tex_lookup_name];
+        } else {
+          ; // do something idk the texture wasnt found bro
+        }
+
+      } else if (!w->active && w->attacking) { // attack is not active and must go back to
+        w->attacking = 0;
+        std::cout<<"player not blocking\n";
+
+        if (TEXTURES.count(w->idle_tex_lookup_name)) {
+          w->texture = TEXTURES[w->idle_tex_lookup_name];
+        } else {
+          ; // do something idk the texture wasnt found bro
+        }
+      }
+    }
+
+  } // for (Weapon* w : hands)
 }
