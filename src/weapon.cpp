@@ -1,0 +1,86 @@
+#include "item.h"
+#include "entity.h"
+
+Weapon::Weapon() {
+  attacking = 0;
+  num_frames = 0;
+  update_every = 0;
+  frame_num = 0;
+  timer_time = 0;
+  timer_last_update = 0;
+  oneshot = 0;
+  update = 0;
+  continuous = 0;
+  active = 0;
+  texture = nullptr;
+}
+
+Item* Weapon::clone() {
+  return new Weapon(*this);
+}
+
+void Weapon::update_equipped_texture(std::string lookup) {
+  if (!SPRITES.count(lookup)) return;
+  i_sprite_texture info = SPRITES[lookup];
+  texture = info.tex;
+  num_frames = info.num_frames;
+  update_every = info.update_every;
+}
+
+void Weapon::update_animation(void) {
+  if (texture == nullptr) return;
+
+  if (oneshot && update) { // it's a one-shot aniamtion - update accordingly
+    if (attacking == 0) {
+      if (TEXTURES.count(atk_tex_lookup_name)) {
+        texture = TEXTURES[atk_tex_lookup_name];
+      } else {
+        ; // do something idk the texture wasnt found bro
+      }
+      attacking = 1;
+    }
+
+    timer_time = SDL_GetTicksNS();
+    int should_update = timer_time - timer_last_update >=
+                        NS_IN_MS(update_every);
+
+    if (should_update) {
+      frame_num++;
+      // std::cout<<"player attacking with weapon\n";
+
+      if (frame_num >= num_frames) { // animation is complete
+        frame_num = 0;
+        update = 0;
+
+        // swap back to idle texture
+        attacking = 0;
+        texture = TEXTURES[idle_tex_lookup_name];
+      }
+      timer_last_update = timer_time;
+    }
+  }
+
+  if (continuous) { // it's a continuous animation - timers not really needed!
+    if (active && !attacking) {
+      attacking = 1; // prevent continuous texture lookup
+
+      // std::cout<<"player blocking\n";
+      if (TEXTURES.count(atk_tex_lookup_name)) {
+        texture = TEXTURES[atk_tex_lookup_name];
+      } else {
+        ; // do something idk the texture wasnt found bro
+      }
+
+    } else if (!active && attacking) { // attack is not active and must go back to
+      attacking = 0;
+
+      // std::cout<<"player not blocking\n";
+      if (TEXTURES.count(idle_tex_lookup_name)) {
+        texture = TEXTURES[idle_tex_lookup_name];
+      } else {
+        ; // do something idk the texture wasnt found bro
+      }
+    }
+  }
+
+}

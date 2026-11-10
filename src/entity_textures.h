@@ -3,7 +3,7 @@
  * these require a bit more information per texture, such as
  * number of sprite frames, if it's a one-shot texture, etc
  *
- */ 
+ */
 
 #ifndef _OBJECT_TEXTURES_
 #define _OBJECT_TEXTURES_

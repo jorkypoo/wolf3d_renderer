@@ -12,7 +12,7 @@
 
 #include <list>
 #include <vector>
-#include <initializer_list> // item drops
+// #include <initializer_list> // item drops
 #include <SDL3/SDL.h> // SDL_GetTicksNS() & type Uint64
 #include "game.h"
 #include "def.h"
@@ -40,7 +40,7 @@ void Deferred_Remove_Entities(void);
 // add entity requires parameters, defense & attack values, and more, hence the
 // json file path
 int add_entity(std::string json_path, std::string json_id, std::string tex_lookup_name, v2 p);
-int add_itemdrop(std::initializer_list<Item*> is, v2 p);
+int add_itemdrop(std::vector<Item*> is, v2 p);
 
 // =============================
 // ===== class definitions =====
@@ -50,7 +50,7 @@ class Entity {
   public:
     Entity(std::string json_path, std::string json_id, Sprite* s, v2 p, v2 d, double cr, double ir);
     virtual ~Entity();
-    
+
     Sprite* sprite;
     Parameters param;
     Defense defense;
@@ -82,7 +82,7 @@ class Entity {
     double get_col_radius() { return collision_radius; }
 
     unsigned get_id() { return id; }
-    
+
   private:
     int to_remove; // flags entity to be removed from the game at the end of the frame
     v2 pos;
@@ -94,7 +94,7 @@ class Entity {
 
 class Item_Drop : public Entity {
   public:
-    Item_Drop(std::string path, std::string id, Sprite* s, std::initializer_list<Item*> itms, v2 p):
+    Item_Drop(std::string path, std::string id, Sprite* s, std::vector<Item*> itms, v2 p):
     Entity(path, id, s, p, {0,0}, 0.0, 0.5) {
       for (Item* i : itms)
         if (i != nullptr) items.push_back(i);
@@ -104,7 +104,7 @@ class Item_Drop : public Entity {
     virtual void update(const Game_Manager* game);
     virtual void on_interaction(const Game_Manager* game);
 
-    void add_items(std::initializer_list<Item*> drops);
+    void add_items(std::vector<Item*> drops);
     std::vector<Item*>& get_items();
 
   private:
@@ -139,7 +139,7 @@ class Sprite {
     unsigned frame_num;  // the frame the current sprite is on, starting at 0
     Uint64 update_every; // how often the sprite should update its sprites in ms
 
-    int oneshot;         // if the animation should only play once; i.e., a trap or weapon 
+    int oneshot;         // if the animation should only play once; i.e., a trap or weapon
     int update;          // used internally if sprite is a one-shot animation
 
     Uint64 timer_time;        // used internally for updating timers

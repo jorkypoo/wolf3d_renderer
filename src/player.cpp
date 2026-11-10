@@ -320,65 +320,7 @@ void Player::attack_input_state_changed(Hand h, bool state) {
 }
 
 void Player::update_equipped_weapon_timers() {
-  for (Weapon* w : hands) {
-    if (w == nullptr) continue;
-    if (w->texture == nullptr) continue;
-
-    if (w->oneshot && w->update) { // it's a one-shot aniamtion - update accordingly
-
-      if (w->attacking == 0) {
-        if (TEXTURES.count(w->atk_tex_lookup_name)) {
-          w->texture = TEXTURES[w->atk_tex_lookup_name];
-        } else {
-          ; // do something idk the texture wasnt found bro
-        }
-        w->attacking = 1;
-      }
-
-      w->timer_time = SDL_GetTicksNS();
-      int should_update = w->timer_time - w->timer_last_update >=
-                          NS_IN_MS(w->update_every);
-
-      if (should_update) {
-        w->frame_num++;
-        std::cout<<"player attacking with weapon\n";
-
-        if (w->frame_num >= w->num_frames) { // animation is complete
-          w->frame_num = 0;
-          w->update = 0;
-
-          // swap back to idle texture
-          w->attacking = 0;
-          w->texture = TEXTURES[w->idle_tex_lookup_name];
-
-        }
-        w->timer_last_update = w->timer_time;
-      }
-    }
-
-    if (w->continuous) { // it's a continuous animation - timers not really needed!
-
-      if (w->active && !w->attacking) {
-        w->attacking = 1; // prevent continuous texture lookup
-        std::cout<<"player blocking\n";
-
-        if (TEXTURES.count(w->atk_tex_lookup_name)) {
-          w->texture = TEXTURES[w->atk_tex_lookup_name];
-        } else {
-          ; // do something idk the texture wasnt found bro
-        }
-
-      } else if (!w->active && w->attacking) { // attack is not active and must go back to
-        w->attacking = 0;
-        std::cout<<"player not blocking\n";
-
-        if (TEXTURES.count(w->idle_tex_lookup_name)) {
-          w->texture = TEXTURES[w->idle_tex_lookup_name];
-        } else {
-          ; // do something idk the texture wasnt found bro
-        }
-      }
-    }
-
-  } // for (Weapon* w : hands)
+  for (Weapon* w : hands)
+    if (w != nullptr)
+      w->update_animation();
 }

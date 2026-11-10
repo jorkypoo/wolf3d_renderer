@@ -12,9 +12,14 @@
 
 #include <string>
 #include <vector>
-#include <initializer_list>
+#include <unordered_map>
 #include "param.h"
 #include "mathutils.h"
+
+class Item;
+
+// N.B. item drops are defined in entity.h as they must be rendered
+// a bit annoying, but it's the easiest to way to them rendered on the map
 
 typedef enum {
   head,
@@ -32,10 +37,38 @@ typedef enum {
 } Hand;
 const int num_hands = 2;
 
+// ======================================
+// ===== item description structure =====
+// ======================================
+
+// basically a big structure containing one of every possible item
+// adding a gamemap is as simple as copying an item from this structure
+// it will allocate the memory as required
+extern std::unordered_map<std::string, Item*> ITEM_DESCRIPTIONS;
+
+// init function to read all item json files &
+void Init_Item_Descriptions(void);
+void Free_Item_Descriptions(void);
+
+// functions for spawning items from the item descriptions
+Item* spawn_item(const std::string& lookup_name);
+Item* spawn_random_item(void);
+
+
+// ================
+// ===== item =====
+// ================
+
 class Item {
   public:
+    Item();
     Item(std::string n, uint w, uint v);
     virtual ~Item() = default;
+
+    // copy constructor for copying from the item description structure
+    // when spawning items into the gamemap
+    // derived classes override this to copy specific data
+    virtual Item* clone() { return nullptr; };
 
     virtual void mod_param(Parameters& p) { return; }
     virtual void unmod_param(Parameters& p) { return; }
@@ -51,6 +84,8 @@ class Item {
     const std::string& get_name() { return name; }
 
   protected:
+    // constructor of sorts, when initialising from json
+    void set_default_item_params(std::string n, uint w, uint v);
     uint weight;
     uint value;
     // uint appraisal;
@@ -65,7 +100,9 @@ class Item {
 
 class Weapon : public Item {
   public:
-    Weapon(std::string n, std::string json_path, std::string json_lookup, int w, int v,
+    Weapon();
+    Weapon(std::string n, std::string json_path, std::string json_lookup,
+           int w, int v,
            PhysicalDamages phys=nophys, unsigned pa=0,
            ElementalDamages elm=noelm,  unsigned ea=0) :
     Item(n, w, v) {
@@ -77,7 +114,7 @@ class Weapon : public Item {
       atk_tex_lookup_name = "assets/sword_atk.png";
 
       // either oneshot or continuous must be set, never both or none
-      oneshot = 1;
+      oneshot = 0;
       update = 0;
       continuous = 0;
       active = 0;
@@ -92,16 +129,20 @@ class Weapon : public Item {
       timer_last_update = 0;
     }
 
-    virtual void mod_param(Parameters& p);
-    virtual void unmod_param(Parameters& p);
-    virtual void mod_def(Parameters& p);
-    virtual void unmod_def(Parameters& p);
-    virtual void mod_dmg(Parameters& p);
-    virtual void unmod_dmg(Parameters& p);
+    virtual Item* clone();
 
-    virtual void main_ability() { return; }
-    virtual void  alt_ability() { return; }
+    virtual void mod_param(Parameters& p) { return; }
+    virtual void unmod_param(Parameters& p) { return; }
+    virtual void mod_def(Parameters& p) { return; }
+    virtual void unmod_def(Parameters& p) { return; }
+    virtual void mod_dmg(Parameters& p) { return; }
+    virtual void unmod_dmg(Parameters& p) { return; }
+
+    virtual void attack() { return; }
     virtual std::string get_name() { return name; }
+
+    void update_animation(void);
+    void update_equipped_texture(std::string lookup);
 
     Damage damage;
 
@@ -110,16 +151,35 @@ class Weapon : public Item {
     std::string idle_tex_lookup_name;
     std::string atk_tex_lookup_name;
 
-    // sorry but i'm making a built in hand texture, just like the C version
-    // "wah wah you already did this" idgaffff its fine
-    // it won't be a seprate class either, just built into Weapon
-    // this also encompasses stuff to tell the weapon when it applies it's damage idkkkk
-
     int oneshot;    // is it a one-shot weapon animation?
     int update;     // then it uses this bool var for timers;
     int continuous; // otherwise, it's a continuous animation,
     int active;     // and it uses this bool var for timers
 
+
+  protected:
+    enum class animation_type {oneshot, continuous};
+
+    // a few 'constructors' that are to be called inside, say, StraightSword's
+    // constructor, once it has read from the json file that was specified
+
+    void update_weapon_animation_info(animation_type type) {
+      switch (type) {
+      case animation_type::oneshot:    oneshot = 1; continuous = 0; break;
+      case animation_type::continuous: continuous = 1; oneshot = 0; break;
+      }
+    }
+
+    void update_weapon_lookup_names(std::string idle, std::string atk) {
+      idle_tex_lookup_name = idle;
+      atk_tex_lookup_name = atk;
+    }
+
+    void update_weapon_damage_params(Damage d) {
+      damage = Damage(d);
+    }
+
+  private:
     int attacking;  // used internally kinda - helps set texture only once
 
     unsigned num_frames; // number of frames for the attack animation
@@ -130,6 +190,14 @@ class Weapon : public Item {
     uint64 timer_time;
     uint64 timer_last_update;
 
+
+};
+
+class StraightSword : public Weapon {
+  public:
+    StraightSword(std::string json_path, std::string json_id); // TODO
+    virtual Item* clone();
+    virtual void attack();
 };
 
 // ===================
@@ -138,6 +206,7 @@ class Weapon : public Item {
 
 class Apparel : public Item {
   public:
+    Apparel();
     Apparel(std::string n, int w, int v,
             uint sl=100, uint pe=100, uint bl=100,
             uint lt=100, uint fi=100, uint fo=100,
@@ -146,6 +215,8 @@ class Apparel : public Item {
     Item(n, w, v) {
       defense = Defense(sl,pe,bl,lt,fi,fo,po,mg,nc,di,pr);
     }
+
+    virtual Item* clone();
 
     virtual void mod_param(Parameters& p);
     virtual void unmod_param(Parameters& p);
@@ -159,6 +230,20 @@ class Apparel : public Item {
     virtual std::string& get_name() { return name; }
 
     Defense defense;
+
+  protected:
+    virtual void update_apparel_defense_params(Defense d) {
+      defense = Defense(d);
+    }
+};
+
+class Helmet : public Apparel {
+  public:
+    Helmet(std::string json_path, std::string json_id);
+    virtual Item* clone();
+
+    virtual int equippable_on(Bodypart b);
+    virtual Bodypart only_equippable_on();
 };
 
 // ===================

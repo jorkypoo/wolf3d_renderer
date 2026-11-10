@@ -1,7 +1,7 @@
 #include "item.h"
 #include "entity.h"
 
-int add_itemdrop(std::initializer_list<Item*> is, v2 p) {
+int add_itemdrop(std::vector<Item*> is, v2 p) {
   if (SPRITES.find("assets/itemdrop.png") == SPRITES.end()) {
     cout << "could not initialise itemdrop: assets/itemdrop.png missing\n";
     return 0;
@@ -47,7 +47,7 @@ void Item_Drop::on_interaction(const Game_Manager* game) {
   this->remove();
 }
 
-void Item_Drop::add_items(std::initializer_list<Item*> drops) {
+void Item_Drop::add_items(std::vector<Item*> drops) {
   for (Item* i : drops) if (i != nullptr) items.push_back(i);
 }
 
