@@ -1,7 +1,25 @@
 #include "item.h"
 #include "entity.h"
 
+///////////////////////////
+///// straight swords /////
+///////////////////////////
+
+StraightSword::StraightSword(std::string path, std::string id) {
+  set_default_item_params("straight sword",1,1);
+
+  // maybe weapons should use their own structure? idk
+  i_sprite_texture info = SPRITES["h"];
+  update_weapon_animation_info(animation_type::oneshot,0,250);
+
+  update_weapon_lookup_names("idle","attack");
+  Damage d = Damage();
+  update_weapon_damage_params(d);
+}
+
 Weapon::Weapon() {
+  std::cout<<"hi from Weapon::Weapon()!\n";
+
   attacking = 0;
   num_frames = 0;
   update_every = 0;

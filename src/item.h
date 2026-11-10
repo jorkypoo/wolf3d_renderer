@@ -163,11 +163,16 @@ class Weapon : public Item {
     // a few 'constructors' that are to be called inside, say, StraightSword's
     // constructor, once it has read from the json file that was specified
 
-    void update_weapon_animation_info(animation_type type) {
+    void update_weapon_animation_info(animation_type type, unsigned num_frames,
+                                      uint64 update_every)
+    {
       switch (type) {
       case animation_type::oneshot:    oneshot = 1; continuous = 0; break;
       case animation_type::continuous: continuous = 1; oneshot = 0; break;
       }
+
+      this->update_every = update_every;
+      this->num_frames = num_frames;
     }
 
     void update_weapon_lookup_names(std::string idle, std::string atk) {
