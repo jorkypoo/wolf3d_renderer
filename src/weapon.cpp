@@ -14,7 +14,7 @@ StraightSword::StraightSword(std::string path, std::string id) {
   update_weapon_animation_info(type, info.num_frames, info.update_every);
   update_equipped_texture(info.tex);
 
-  update_weapon_lookup_names("assets/sword.png","assets/sword.png");
+  update_weapon_lookup_names("assets/sword.png");
   Damage d = Damage();
   update_weapon_damage_params(d);
 }
@@ -33,8 +33,6 @@ void StraightSword::attack() {
 ///////////////////////
 
 Weapon::Weapon() {
-  std::cout<<"hi from Weapon::Weapon()!\n";
-
   attacking = 0;
   num_frames = 0;
   update_every = 0;
@@ -68,18 +66,12 @@ void Weapon::update_equipped_texture(Color* tex) {
 }
 
 void Weapon::update_animation(void) {
-  if (texture == nullptr) return;
+  if (texture == nullptr) {
+    if (!SPRITES.count(tex_lookup_name)) return;
+    texture = SPRITES[tex_lookup_name].tex;
+  }
 
   if (oneshot && update) { // it's a one-shot aniamtion - update accordingly
-    if (attacking == 0) {
-      if (TEXTURES.count(atk_tex_lookup_name)) {
-        texture = TEXTURES[atk_tex_lookup_name];
-      } else {
-        ; // do something idk the texture wasnt found bro
-      }
-      attacking = 1;
-    }
-
     timer_time = SDL_GetTicksNS();
     int should_update = timer_time - timer_last_update >=
                         NS_IN_MS(update_every);
@@ -91,15 +83,37 @@ void Weapon::update_animation(void) {
       if (frame_num >= num_frames) { // animation is complete
         frame_num = 0;
         update = 0;
-
-        // swap back to idle texture
-        attacking = 0;
-        texture = TEXTURES[idle_tex_lookup_name];
       }
       timer_last_update = timer_time;
     }
   }
 
+  // continuous animations will display the first frame when not active
+  // and display 1-num_frames whilst the thingy is active
+  // this will probably work idk
+
+  if (continuous) {
+    if (!active) { // button is currently not being pressed
+      frame_num = 0;
+
+    } else {
+      timer_time = SDL_GetTicksNS();
+      int should_update = timer_time - timer_last_update >=
+                          NS_IN_MS(update_every);
+
+      if (should_update) {
+        frame_num++;
+        // std::cout<<"player attacking with weapon\n";
+
+        if (frame_num >= num_frames) { // animation is complete
+          frame_num = 1;
+        }
+        timer_last_update = timer_time;
+      }
+    }
+  }
+
+  /*
   if (continuous) { // it's a continuous animation - timers not really needed!
     if (active && !attacking) {
       attacking = 1; // prevent continuous texture lookup
@@ -122,5 +136,6 @@ void Weapon::update_animation(void) {
       }
     }
   }
+  */
 
 }

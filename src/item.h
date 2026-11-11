@@ -50,7 +50,8 @@ extern std::unordered_map<std::string, Item*> ITEM_DESCRIPTIONS;
 void Init_Item_Descriptions(void);
 void Free_Item_Descriptions(void);
 
-// functions for spawning items from the item descriptions
+// functions for spawning items from the item descriptions structure
+// only used in spawning item drops, because that's how items exist within the map
 Item* spawn_item(const std::string& lookup_name);
 Item* spawn_random_item(void);
 
@@ -110,8 +111,8 @@ class Weapon : public Item {
       texture = nullptr;
       attacking = 0;
 
-      idle_tex_lookup_name = "assets/sword_idle.png";
-      atk_tex_lookup_name = "assets/sword_atk.png";
+      // idle_tex_lookup_name = "assets/sword_idle.png";
+      // atk_tex_lookup_name = "assets/sword_atk.png";
 
       // either oneshot or continuous must be set, never both or none
       oneshot = 0;
@@ -148,9 +149,10 @@ class Weapon : public Item {
     Damage damage;
 
     Color* texture;
+    std::string tex_lookup_name;
 
-    std::string idle_tex_lookup_name;
-    std::string atk_tex_lookup_name;
+    // std::string idle_tex_lookup_name;
+    // std::string atk_tex_lookup_name;
 
     int oneshot;    // is it a one-shot weapon animation?
     int update;     // then it uses this bool var for timers;
@@ -176,9 +178,8 @@ class Weapon : public Item {
       this->num_frames = num_frames;
     }
 
-    void update_weapon_lookup_names(std::string idle, std::string atk) {
-      idle_tex_lookup_name = idle;
-      atk_tex_lookup_name = atk;
+    void update_weapon_lookup_names(std::string name) {
+      tex_lookup_name = name;
     }
 
     void update_weapon_damage_params(Damage d) {

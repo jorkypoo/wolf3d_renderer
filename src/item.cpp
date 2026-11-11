@@ -7,7 +7,6 @@ void Init_Item_Descriptions(void) {
   // i'll read from a json later (as always) but will hard code some stuff in now
   // ITEM_DESCRIPTIONS["gold helmet"] = new StraightSword("");
   ITEM_DESCRIPTIONS["sword"] = new StraightSword("path", "id");
-  std::cout<<ITEM_DESCRIPTIONS.size()<<std::endl;
 }
 
 void Free_Item_Descriptions(void) {
