@@ -41,6 +41,8 @@ void Deferred_Remove_Entities(void);
 // json file path
 int add_entity(std::string json_path, std::string json_id, std::string tex_lookup_name, v2 p);
 int add_itemdrop(std::vector<Item*> is, v2 p);
+int add_itemdrop(int num_items, v2 p);
+int add_random_itemdrop(int num_items, v2 pos);
 
 // =============================
 // ===== class definitions =====
@@ -98,6 +100,13 @@ class Item_Drop : public Entity {
     Entity(path, id, s, p, {0,0}, 0.0, 0.5) {
       for (Item* i : itms)
         if (i != nullptr) items.push_back(i);
+    }
+    Item_Drop(std::string path, std::string id, Sprite* s, int num_items, v2 p):
+    Entity(path, id, s, p, {0,0}, 0.0, 0.5) {
+      for (int i = 0; i < num_items; i++) {
+        Item* dest = spawn_random_item();
+        if (dest != nullptr) items.push_back(dest);
+      }
     }
     ~Item_Drop();
 

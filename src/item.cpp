@@ -1,4 +1,5 @@
 #include "item.h"
+#include <cstdlib>
 
 std::unordered_map<std::string, Item*> ITEM_DESCRIPTIONS;
 
@@ -6,6 +7,7 @@ void Init_Item_Descriptions(void) {
   // i'll read from a json later (as always) but will hard code some stuff in now
   // ITEM_DESCRIPTIONS["gold helmet"] = new StraightSword("");
   ITEM_DESCRIPTIONS["sword"] = new StraightSword("path", "id");
+  std::cout<<ITEM_DESCRIPTIONS.size()<<std::endl;
 }
 
 void Free_Item_Descriptions(void) {
@@ -25,7 +27,6 @@ Item::Item(std::string n, uint w, uint v) {
 }
 
 Item::Item() {
-  std::cout<<"hi from default item constructor: Item::Item!\n";
   weight = 1;
   value = 0;
   name = "unset";
@@ -48,11 +49,14 @@ Item* spawn_item(const std::string& lookup_name) {
 }
 
 Item* spawn_random_item() {
-  Item* ret = nullptr;
+  int r = rand() % ITEM_DESCRIPTIONS.size();
 
-  // unsigned num_items = ITEM_DESCRIPTIONS.size();
-  // unsigned random = 0;
+  auto i = ITEM_DESCRIPTIONS.begin();
+  for (int c = 0; c < r; c++, i++) {;}
 
-  return ret;
+  if (i == ITEM_DESCRIPTIONS.end() || i->second == nullptr) return nullptr;
+
+  Item* dest = i->second->clone();
+  return dest;
 }
 

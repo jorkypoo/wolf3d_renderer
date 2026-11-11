@@ -26,6 +26,7 @@ int main(int argv, char** argc) {
   Init_Global_Sprites();
   Init_Entities();
   Init_Map();
+  Init_Item_Descriptions();
   // print_map();
 
 
@@ -41,6 +42,7 @@ int main(int argv, char** argc) {
   Free_Entities();
   Free_Textures();
   Free_Sprites();
+  Free_Item_Descriptions();
 
   return 0;
 }

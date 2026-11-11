@@ -17,6 +17,7 @@
 #include <iostream>
 #include <vector>
 #include <array>
+#include <cstdlib> // srand() & rand()
 #include "def.h"
 #include "mathutils.h"
 #include "map.h"

@@ -23,6 +23,8 @@ Game_Manager::~Game_Manager() {
 }
 
 int Game_Manager::Init(const char* window_name, int window_w, int window_h, int tex_w, int tex_h) {
+  srand(time(NULL));
+
   if (!SDL_Init(SDL_INIT_VIDEO)) {
     cout << "SDL_Init Failed";
     return 0;
@@ -39,7 +41,7 @@ int Game_Manager::Init(const char* window_name, int window_w, int window_h, int 
     cout << "Error: Failed to create renderer: " << SDL_GetError() << "\n";
     return 0;
   }
-      
+
   SDL_SetRenderLogicalPresentation(renderer, window_w, window_h, SDL_LOGICAL_PRESENTATION_LETTERBOX);
 
   texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, tex_w, tex_h);
@@ -47,7 +49,7 @@ int Game_Manager::Init(const char* window_name, int window_w, int window_h, int 
     cout << "Error: Failed to create game texture: " << SDL_GetError() << "\n";
     return 0;
   }
-      
+
   SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
 
   running = 1;

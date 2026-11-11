@@ -20,12 +20,23 @@ int add_itemdrop(std::vector<Item*> is, v2 p) {
   return 1;
 }
 
-int add_itemdrop(int num_items, v2 pos) {
-  std::vector<Item*> dest;
-
-  for (int i = 0; i < num_items; i++) {
-
+int add_random_itemdrop(int num_items, v2 pos) {
+  if (SPRITES.find("assets/itemdrop.png") == SPRITES.end()) {
+    cout << "could not initialise itemdrop: assets/itemdrop.png missing\n";
+    return 0;
   }
+
+  // create the sprite & its texture for the entity
+  i_sprite_texture t = SPRITES["assets/itemdrop.png"];
+  Sprite* dest = new Sprite(t.tex, t.num_frames, t.update_every, t.oneshot);
+
+  // look up the correct entity params and stuff to initialise w/ constructor
+  std::string entity_param_path = "example/path.json";
+  std::string entity_param_id   = "example_name";
+  Item_Drop* e = new Item_Drop(entity_param_path, entity_param_id, dest, num_items, pos);
+  ENTITIES.push_back(e);
+
+  return 1;
 }
 
 Item_Drop::~Item_Drop() {

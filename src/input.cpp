@@ -28,11 +28,12 @@ void Input(Game_Manager* Game) {
             Game->set_running_state(0);
             break;
           case SDLK_F2:
-            Item* i = spawn_item("sword");
-            if (i == nullptr) std::cout<<"item is null!\n";
-            i = spawn_random_item();
-            if (i == nullptr) std::cout<<"item is null!\n";
-            add_itemdrop({i}, {2,3});
+            // Item* i = spawn_item("sword");
+            // if (i == nullptr) std::cout<<"item is null!\n";
+            // i = spawn_random_item();
+            // if (i == nullptr) std::cout<<"item is null!\n";
+            // add_itemdrop({i}, {2,3});
+            add_random_itemdrop(1, {2,3});
             break;
         } // e.key.key
     } // e.type
