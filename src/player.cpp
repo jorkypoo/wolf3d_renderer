@@ -92,8 +92,9 @@ int Player::inv_get_item_index(const Item* i) {
 }
 
 void Player::inv_add(std::vector<Item*>& itms) {
-  std::cout<<"player picked up items drop item drop\n";
   for (Item* i : itms) {
+    if (i != nullptr)
+      std::cout<<"player picked up "<<i->get_name()<<" drop item drop\n";
     if (i != nullptr)
       inventory.push_back(i);
   }

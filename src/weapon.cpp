@@ -9,13 +9,28 @@ StraightSword::StraightSword(std::string path, std::string id) {
   set_default_item_params("straight sword",1,1);
 
   // maybe weapons should use their own structure? idk
-  i_sprite_texture info = SPRITES["h"];
-  update_weapon_animation_info(animation_type::oneshot,0,250);
+  i_sprite_texture info = SPRITES["assets/sword.png"];
+  animation_type type = info.oneshot ? animation_type::oneshot : animation_type::continuous;
+  update_weapon_animation_info(type, info.num_frames, info.update_every);
+  update_equipped_texture(info.tex);
 
-  update_weapon_lookup_names("idle","attack");
+  update_weapon_lookup_names("assets/sword.png","assets/sword.png");
   Damage d = Damage();
   update_weapon_damage_params(d);
 }
+
+Item* StraightSword::clone() {
+  return new StraightSword(*this);
+}
+
+void StraightSword::attack() {
+  std::cout<<"attacking with "<<get_name()<<"!\n";
+  return;
+}
+
+///////////////////////
+///// weapon base /////
+///////////////////////
 
 Weapon::Weapon() {
   std::cout<<"hi from Weapon::Weapon()!\n";
@@ -39,10 +54,17 @@ Item* Weapon::clone() {
 
 void Weapon::update_equipped_texture(std::string lookup) {
   if (!SPRITES.count(lookup)) return;
+
   i_sprite_texture info = SPRITES[lookup];
   texture = info.tex;
   num_frames = info.num_frames;
   update_every = info.update_every;
+}
+
+void Weapon::update_equipped_texture(Color* tex) {
+  if (!tex) return;
+
+  texture = tex;
 }
 
 void Weapon::update_animation(void) {

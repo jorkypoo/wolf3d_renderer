@@ -17,6 +17,13 @@ Item* Helmet::clone() {
   return new Helmet(*this);
 }
 
+int Helmet::equippable_on(Bodypart b) {
+  return b == head ? 1 : 0;
+}
+
+Bodypart Helmet::only_equippable_on() {
+  return head;
+}
 
 Apparel::Apparel() {
   // nothing needs to be done! wow

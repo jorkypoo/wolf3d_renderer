@@ -143,6 +143,7 @@ class Weapon : public Item {
 
     void update_animation(void);
     void update_equipped_texture(std::string lookup);
+    void update_equipped_texture(Color* tex);
 
     Damage damage;
 
@@ -195,7 +196,6 @@ class Weapon : public Item {
     uint64 timer_time;
     uint64 timer_last_update;
 
-
 };
 
 class StraightSword : public Weapon {
@@ -223,12 +223,12 @@ class Apparel : public Item {
 
     virtual Item* clone();
 
-    virtual void mod_param(Parameters& p);
-    virtual void unmod_param(Parameters& p);
-    virtual void mod_def(Parameters& p);
-    virtual void unmod_def(Parameters& p);
-    virtual void mod_dmg(Parameters& p);
-    virtual void unmod_dmg(Parameters& p);
+    virtual void mod_param(Parameters& p) { return; }
+    virtual void unmod_param(Parameters& p) { return; }
+    virtual void mod_def(Parameters& p) { return; }
+    virtual void unmod_def(Parameters& p) { return; }
+    virtual void mod_dmg(Parameters& p) { return; }
+    virtual void unmod_dmg(Parameters& p) { return; }
 
     virtual int equippable_on(Bodypart b) { return 0; }
     virtual Bodypart only_equippable_on() { return (Bodypart) 0; }

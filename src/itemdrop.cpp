@@ -20,6 +20,14 @@ int add_itemdrop(std::vector<Item*> is, v2 p) {
   return 1;
 }
 
+int add_itemdrop(int num_items, v2 pos) {
+  std::vector<Item*> dest;
+
+  for (int i = 0; i < num_items; i++) {
+
+  }
+}
+
 Item_Drop::~Item_Drop() {
   // errors may occur here if player's pick up item drop code is fucky
   auto i = items.begin();
@@ -43,6 +51,7 @@ void Item_Drop::update(const Game_Manager* game) {
 }
 
 void Item_Drop::on_interaction(const Game_Manager* game) {
+  for (Item* i : items) std::cout<<"item in item drop is "<<i->get_name()<<std::endl;
   game->player->inv_add(this->get_items());
   this->remove();
 }

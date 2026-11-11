@@ -5,6 +5,7 @@ std::unordered_map<std::string, Item*> ITEM_DESCRIPTIONS;
 void Init_Item_Descriptions(void) {
   // i'll read from a json later (as always) but will hard code some stuff in now
   // ITEM_DESCRIPTIONS["gold helmet"] = new StraightSword("");
+  ITEM_DESCRIPTIONS["sword"] = new StraightSword("path", "id");
 }
 
 void Free_Item_Descriptions(void) {

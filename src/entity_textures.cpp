@@ -7,7 +7,7 @@ int Init_Sprites(void) {
 
   // for static objects, such as a barrel, they do not need an animation
   // thus, mark the num_frames of the animation as 0 (1 will not work due to the way timers work)
-  // 
+  //
   // also, technically, the name does not have to be the file path, but it shall
   // always be unique, so why not use it for my own convetion
   // protections must be put in place when adding a new entry to SPRITES, so no
@@ -26,7 +26,7 @@ int Init_Sprites(void) {
   // this step will have to be completed for however many sprite frames exist under the same texture
   // one sprite frame must be it's own unique file, sorry
   // also maintain an offset as this loading of images will be automatic
-  // unsigned offset = i * sq(TEXSIZE) - first 
+  // unsigned offset = i * sq(TEXSIZE) - first
   load_image_to_buff("assets/yuki1a.png",SPRITES["assets/hourai.png"].tex,            TEXSIZE,TEXSIZE);
   load_image_to_buff("assets/yuki2a.png",SPRITES["assets/hourai.png"].tex+sq(TEXSIZE),TEXSIZE,TEXSIZE);
 
@@ -34,6 +34,17 @@ int Init_Sprites(void) {
   SPRITES["assets/itemdrop.png"] = {0, "assets/itemdrop.png", 0, 0, 0};
   SPRITES["assets/itemdrop.png"].tex = new Color[sq(TEXSIZE)];
   load_image_to_buff("assets/itemdrop.png", SPRITES["assets/itemdrop.png"].tex, TEXSIZE, TEXSIZE);
+
+  // testing adding weapon textures to the sprites texture structure
+  SPRITES["assets/sword.png"] = {0, "assets/sword.png", 4, 400, 1};
+  SPRITES["assets/sword.png"].tex = new Color[sq(TEXSIZE) * SPRITES["assets/sword.png"].num_frames];
+
+  // remember the offsets for multiple sprite frames
+  load_image_to_buff("assets/sword1.png", SPRITES["assets/sword.png"].tex,                 TEXSIZE, TEXSIZE);
+  load_image_to_buff("assets/sword2.png", SPRITES["assets/sword.png"].tex+(sq(TEXSIZE)*1), TEXSIZE, TEXSIZE);
+  load_image_to_buff("assets/sword3.png", SPRITES["assets/sword.png"].tex+(sq(TEXSIZE)*2), TEXSIZE, TEXSIZE);
+  load_image_to_buff("assets/sword3.png", SPRITES["assets/sword.png"].tex+(sq(TEXSIZE)*3), TEXSIZE, TEXSIZE);
+
 
   return 1;
 }
