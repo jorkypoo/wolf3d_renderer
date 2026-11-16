@@ -46,7 +46,6 @@ extern Color FOGMAP[NUM_FOGMAP_COLORS][FOGLEVELS][256];
 extern unordered_map<string, Color*> TEXTURES;
 
 int Init_Map(void);
-void print_map(void); // for debugging
 
 int  Init_Global_Textures(void);
 void Free_Textures(void);

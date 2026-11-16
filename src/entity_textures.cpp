@@ -1,4 +1,5 @@
 #include "entity_textures.h"
+#include "def.h"
 
 unordered_map<string, i_sprite_texture> SPRITES;
 
@@ -17,33 +18,33 @@ int Init_Sprites(void) {
   SPRITES["assets/entity/crate.png"] = {0, "assets/entity/crate.png", 0, 0, 0};
   // if the sprite is static (only 1 frame - so num_frames is specified as 0) we gotta add 1 to the below statement
   // most reusable way to do this ermmm. its just hard coded now bc im lazy
-  SPRITES["assets/entity/crate.png"].tex = new Color[sq(TEXSIZE)];
-  load_image_to_buff("assets/entity/crate.png",SPRITES["assets/entity/crate.png"].tex,TEXSIZE,TEXSIZE);
+  SPRITES["assets/entity/crate.png"].tex = new Color[sq(OBJSIZE)];
+  load_image_to_buff("assets/entity/crate.png",SPRITES["assets/entity/crate.png"].tex,OBJSIZE,OBJSIZE);
 
   // an animated sprite
   SPRITES["assets/hourai.png"] = {0, "assets/hourai.png", 2, 250, 0};
-  SPRITES["assets/hourai.png"].tex = new Color[( sq(TEXSIZE) * (SPRITES["assets/hourai.png"].num_frames) )];
+  SPRITES["assets/hourai.png"].tex = new Color[( sq(OBJSIZE) * (SPRITES["assets/hourai.png"].num_frames) )];
   // this step will have to be completed for however many sprite frames exist under the same texture
   // one sprite frame must be it's own unique file, sorry
   // also maintain an offset as this loading of images will be automatic
   // unsigned offset = i * sq(TEXSIZE) - first
-  load_image_to_buff("assets/yuki1a.png",SPRITES["assets/hourai.png"].tex,            TEXSIZE,TEXSIZE);
-  load_image_to_buff("assets/yuki2a.png",SPRITES["assets/hourai.png"].tex+sq(TEXSIZE),TEXSIZE,TEXSIZE);
+  load_image_to_buff("assets/yuki1a.png",SPRITES["assets/hourai.png"].tex,            OBJSIZE,OBJSIZE);
+  load_image_to_buff("assets/yuki2a.png",SPRITES["assets/hourai.png"].tex+sq(OBJSIZE),OBJSIZE,OBJSIZE);
 
   // an item drop example
   SPRITES["assets/itemdrop.png"] = {0, "assets/itemdrop.png", 0, 0, 0};
-  SPRITES["assets/itemdrop.png"].tex = new Color[sq(TEXSIZE)];
-  load_image_to_buff("assets/itemdrop.png", SPRITES["assets/itemdrop.png"].tex, TEXSIZE, TEXSIZE);
+  SPRITES["assets/itemdrop.png"].tex = new Color[sq(OBJSIZE)];
+  load_image_to_buff("assets/itemdrop.png", SPRITES["assets/itemdrop.png"].tex, OBJSIZE, OBJSIZE);
 
   // testing adding weapon textures to the sprites texture structure
   SPRITES["assets/sword.png"] = {0, "assets/sword.png", 4, 400, 1};
-  SPRITES["assets/sword.png"].tex = new Color[sq(TEXSIZE) * SPRITES["assets/sword.png"].num_frames];
+  SPRITES["assets/sword.png"].tex = new Color[sq(EQSIZE) * SPRITES["assets/sword.png"].num_frames];
 
   // remember the offsets for multiple sprite frames
-  load_image_to_buff("assets/sword1.png", SPRITES["assets/sword.png"].tex,                 TEXSIZE, TEXSIZE);
-  load_image_to_buff("assets/sword2.png", SPRITES["assets/sword.png"].tex+(sq(TEXSIZE)*1), TEXSIZE, TEXSIZE);
-  load_image_to_buff("assets/sword3.png", SPRITES["assets/sword.png"].tex+(sq(TEXSIZE)*2), TEXSIZE, TEXSIZE);
-  load_image_to_buff("assets/sword3.png", SPRITES["assets/sword.png"].tex+(sq(TEXSIZE)*3), TEXSIZE, TEXSIZE);
+  load_image_to_buff("assets/sword1.png", SPRITES["assets/sword.png"].tex,                EQSIZE, EQSIZE);
+  load_image_to_buff("assets/sword2.png", SPRITES["assets/sword.png"].tex+(sq(EQSIZE)*1), EQSIZE, EQSIZE);
+  load_image_to_buff("assets/sword3.png", SPRITES["assets/sword.png"].tex+(sq(EQSIZE)*2), EQSIZE, EQSIZE);
+  load_image_to_buff("assets/sword3.png", SPRITES["assets/sword.png"].tex+(sq(EQSIZE)*3), EQSIZE, EQSIZE);
 
 
   return 1;

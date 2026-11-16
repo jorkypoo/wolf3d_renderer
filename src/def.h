@@ -14,11 +14,11 @@
 #define PIXELY      (180*PIXELSCALE)
 #define MAPX        (8)
 #define MAPY        (8)
-#define TEXSIZE     (64)
+#define TEXSIZE     (128)
 #define OBJSIZE     (128)
 #define EQSIZE      (90)
-#define FOGDIST     (15)
-#define OBJ_FOGDIST (15*FOGDIST)
+#define FOGDIST     (12)
+#define OBJ_FOGDIST (20*FOGDIST)
 
 #define NS_IN_MS(ms) (ms * 1000000)
 

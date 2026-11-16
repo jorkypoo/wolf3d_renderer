@@ -18,18 +18,6 @@ Color FOGMAP[NUM_FOGMAP_COLORS][FOGLEVELS][256];
 // textures are loaded into ram & stored here
 unordered_map<string, Color*> TEXTURES;
 
-
-int Init_Tiles(void) {
-  Tile air = {1, 0, 0, "air"};
-  Tile blk = {0, 0, 0, "bricks"};
-  Tile wod = {0, 0, 0, "concrete"};
-  tiles[air.lookup_name] = air;
-  tiles[blk.lookup_name] = blk;
-  tiles[wod.lookup_name] = wod;
-
-  return 1;
-}
-
 int Init_Gamemap(void) {
   // set everything to air idgaf
   for (int y = 0; y < MAPY; y++)
@@ -47,18 +35,7 @@ int Init_Gamemap(void) {
 
   return 1;
 }
-
-/* void print_map() {
-  for (int y = 0; y < MAPX; y++) {
-    cout << "\n";
-    for (int x = 0; x < MAPX; x++) {
-      cout << GAMEMAP[MAPX * y + x].lookup_name << "\n";
-    }
-  }
-} */
-
 int Init_Map(void) {
-  Init_Tiles();
   Init_Gamemap();
 
   return 1;
