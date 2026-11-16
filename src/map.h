@@ -11,13 +11,15 @@
 #include <string>
 #include <unordered_map>
 #include <iostream>
-using namespace std;
+#include <fstream>
 
 #include "image_load.h"
 #include "def.h"
+#include "thirdparty/json.hpp"
+using namespace nlohmann;
 
 #define FOGLEVELS  (64)
-#define DARKLEVELS (32)
+// #define DARKLEVELS (32)
 #define NUM_FOGMAP_COLORS (3)
 typedef enum {
  FM_RED,
@@ -29,7 +31,10 @@ typedef enum {
 typedef struct Tile Tile;
 struct Tile {
   int is_air;              // basically always 1 except for my predefined air tile
-  const char* lookup_name; // the filepath, but acts as a lookup for the texture hash map
+  int is_decor;            // used in random generation - spreads block out if decor
+  int depth;               // used in random generation - matches similar nums in a level together
+  std::string lookup_name; // the filepath, but acts as a lookup for the texture hash map
+  Color* texture;
 };
 
 // must this be defined here?

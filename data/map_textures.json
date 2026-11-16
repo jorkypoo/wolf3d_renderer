@@ -1,0 +1,34 @@
+{
+   "air":
+   {
+      "texture lookup name": "air",
+      "texture path": "na",
+      "is air": 1,
+      "is decor": 0,
+      "depth": 0
+   },
+   "bricks":
+   {
+      "texture lookup name": "bricks",
+      "texture path": "assets/texture/bricks.png",
+      "is air": 0,
+      "is decor": 0,
+      "depth": 1
+   },
+   "concrete":
+   {
+      "texture lookup name": "concrete",
+      "texture path": "assets/texture/concrete.png",
+      "is air": 0,
+      "is decor": 0,
+      "depth": 1
+   },
+   "metal":
+   {
+      "texture lookup name": "metal",
+      "texture path": "assets/texture/metal.png",
+      "is air": 0,
+      "is decor": 1,
+      "depth": 1
+   }
+}

@@ -14,8 +14,8 @@
 
 inline Color add_fog_to_color(Color (*fgmp)[FOGLEVELS][256], Color input_color, unsigned fog_amount) {
   unsigned char* color_components = (unsigned char*) &input_color;
-  
-  color_components[2] = (fgmp[FM_RED]  [fog_amount][color_components[2]]); 
+
+  color_components[2] = (fgmp[FM_RED]  [fog_amount][color_components[2]]);
   color_components[1] = (fgmp[FM_GREEN][fog_amount][color_components[1]]);
   color_components[0] = (fgmp[FM_BLUE] [fog_amount][color_components[0]]);
 
@@ -38,8 +38,8 @@ void Render(Game_Manager* Game) {
 
   // grab these from the level like:
   // Game->level/dungeon.get_floor_/ceiling_texture()
-  Color* floor_tex = TEXTURES["assets/colorstone.png"];  
-  Color*  ceil_tex = TEXTURES["assets/wood.png"];
+  Color* floor_tex = TEXTURES["metal"];
+  Color*  ceil_tex = TEXTURES["metal"];
   // Color* tex_for_col = TEXTURES[tile_for_col.lookup_name];
 
   for(int y = 0; y < PIXELY; y++) {
@@ -93,7 +93,7 @@ void Render(Game_Manager* Game) {
 
       // choose texture and draw the pixel
       Color c = 0;
-      
+
       // floor
       c = floor_tex[TEXSIZE * ty + tx];
       #ifdef FOG_RENDERING
@@ -142,7 +142,7 @@ void Render(Game_Manager* Game) {
     v2i step = { (int) sign(ray.x), (int) sign(ray.y) };
 
     int hit = 0; int side = 0;
-    // int val = 0; 
+    // int val = 0;
 
 
     // perform DDA
@@ -161,7 +161,7 @@ void Render(Game_Manager* Game) {
       if (!GAMEMAP[MAPX * map_pos.y + map_pos.x].is_air) {
         hit = 1;
       }
-    } 
+    }
 
     // perpendictular distance to the hit
     double perp_dist = 0;
@@ -171,7 +171,7 @@ void Render(Game_Manager* Game) {
     // calculating the height of the wall
     int wall_height = (int) PIXELY / perp_dist;
 
-    int wall_top = -wall_height / 2 + PIXELY / 2; 
+    int wall_top = -wall_height / 2 + PIXELY / 2;
     int wall_btm =  wall_height / 2 + PIXELY / 2;
 
     // cap within bounds of the screen buffer
@@ -184,9 +184,9 @@ void Render(Game_Manager* Game) {
     /* ===== texture rendering ===== */
 
     // tile that has been detected this column
-    // 
+    //
     // this structure is defined in map.h & contains
-    // the texture hash map lookup name 
+    // the texture hash map lookup name
     Tile tile_for_col = GAMEMAP[MAPX * map_pos.y + map_pos.x];
 
     // instead of querying the hashmap every pixel, query it every column
@@ -199,7 +199,7 @@ void Render(Game_Manager* Game) {
     if (side == 0) wall_x = Game->player->get_posy() + perp_dist * ray.y;
     else           wall_x = Game->player->get_posx() + perp_dist * ray.x;
     wall_x -= floor(wall_x);
-    
+
     // x coordinate on the texture
     int tex_x = (int) (wall_x * TEXSIZE);
     if (side == 0 && ray.x > 0) tex_x = TEXSIZE - tex_x - 1;
@@ -237,10 +237,10 @@ void Render(Game_Manager* Game) {
       #ifdef FOG_RENDERING
       c = add_fog_to_color(FOGMAP, c, fog_amt);
       #endif
-      
+
       fill_point(Game->buffer, x, y, c);
     }
-      
+
     // darken colours
     if (side == 1) {
       const Color br = ((c & 0xFF00FF) * 0xC0) >> 8;
@@ -268,9 +268,9 @@ void Render(Game_Manager* Game) {
 
   // basically the rendering function only cares about the sprite part of an entity
   // every entity has one and it can either be static or animated - 1 sprite frame or > 1
-  // 
+  //
   // animated sprite's current sprite frame rendered is based on an offset:
-  // frame_num * (twidth * wheight)^2 - this is used as a texture array lookup 
+  // frame_num * (twidth * wheight)^2 - this is used as a texture array lookup
   //
   // if it is a static sprite, frame_num should ALWAYS be 0, so you always get the
   // first element of the texture buffer, not reaching out of bounds of it's array
@@ -284,7 +284,7 @@ void Render(Game_Manager* Game) {
   // for each object.entity within all objects (it'll be a linked list):
   // calculate distance from the player to the entity
   // sort the linked list based on which is furthest from player (measure how fast this is - it should be fast!)
-  //  
+  //
   // for each object.sprite within all objects:
   // boring maths i'll copy paste
   // if FOG_RENDERING is defined: fog calculations
@@ -299,11 +299,11 @@ void Render(Game_Manager* Game) {
   // if the alpha channel is 0xFF:
   // if FOG_RENDERING is defined: add fog to colour grabbed
   // fill the point
-  // 
+  //
   // easy enough!
 
   for (Entity* cur : ENTITIES) {
-    double distx = Game->player->get_posx() - cur->get_posx();    
+    double distx = Game->player->get_posx() - cur->get_posx();
     double disty = Game->player->get_posy() - cur->get_posy();
     cur->sprite->set_sprite_dist(distx * distx + disty * disty);
   }
@@ -320,8 +320,8 @@ void Render(Game_Manager* Game) {
 
     double inv_det = 1.0 / ( (Game->player->get_planex() * Game->player->get_diry()) - \
                              (Game->player->get_dirx() * Game->player->get_planey()) );
-    
-     
+
+
     v2 transform = {
       inv_det * ( Game->player->get_diry() * sprite.x - Game->player->get_dirx() * sprite.y),
       inv_det * (-Game->player->get_planey() * sprite.x + Game->player->get_planex() * sprite.y)
@@ -332,7 +332,7 @@ void Render(Game_Manager* Game) {
 
     int spriteScreenX = (int) (((float) PIXELX / 2) * (1 + transform.x / transform.y));
 
-    int spriteHeight = abs((int)(PIXELY / (transform.y))); 
+    int spriteHeight = abs((int)(PIXELY / (transform.y)));
     int spriteWidth =  abs((int)(PIXELY / (transform.y)));
 
     v2i draw_start = {
@@ -352,7 +352,7 @@ void Render(Game_Manager* Game) {
     // again, cap values within the bounds of the buffer
     if (draw_end.x >= PIXELX) draw_end.x = PIXELX - 1;
     if (draw_end.y >= PIXELY) draw_end.y = PIXELY - 1;
-        
+
     #ifdef FOG_RENDERING
     unsigned fog_amt = (cur->sprite->get_sprite_dist() / OBJ_FOGDIST) * FOGLEVELS;
     if (fog_amt >= FOGLEVELS) fog_amt = FOGLEVELS-1;
@@ -376,12 +376,12 @@ void Render(Game_Manager* Game) {
           Color color = cur->sprite->texture[offset + (TEXSIZE * texY + texX)]; //get current color from the texture
 
           // if the color to be drawn is full alpha
-          if ((color & 0xFF000000) == 0xFF000000) { 
+          if ((color & 0xFF000000) == 0xFF000000) {
           // if ((color & 0xFF000000) != 0x00) { // sorry prawcin
             #ifdef FOG_RENDERING
             color = add_fog_to_color(FOGMAP, color, fog_amt);
             #endif
-            fill_point(Game->buffer, stripe, y, color); 
+            fill_point(Game->buffer, stripe, y, color);
           }
         }
 
@@ -389,7 +389,7 @@ void Render(Game_Manager* Game) {
     }   // for stripe in sprite on screen
 
   }
-  
+
   #endif // ENTITY_SPRITE_RENDERING
 
   end_rendering(Game);
@@ -403,7 +403,7 @@ void init_rendering(Game_Manager* Game) {
 
 void end_rendering(Game_Manager* Game) {
   // no idea why last param has to be like that but it works lol
-  SDL_UpdateTexture(Game->texture, NULL, Game->buffer, PIXELX * sizeof(unsigned)); 
+  SDL_UpdateTexture(Game->texture, NULL, Game->buffer, PIXELX * sizeof(unsigned));
   SDL_RenderTexture(Game->renderer, Game->texture, NULL, NULL);
 
   #ifdef PRINT_FPS

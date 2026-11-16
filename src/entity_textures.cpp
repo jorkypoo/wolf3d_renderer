@@ -14,11 +14,11 @@ int Init_Sprites(void) {
   // existing sprites would be overwritten
 
   // a static sprite
-  SPRITES["assets/barrel.png"] = {0, "assets/barrel.png", 0, 0, 0};
+  SPRITES["assets/entity/crate.png"] = {0, "assets/entity/crate.png", 0, 0, 0};
   // if the sprite is static (only 1 frame - so num_frames is specified as 0) we gotta add 1 to the below statement
   // most reusable way to do this ermmm. its just hard coded now bc im lazy
-  SPRITES["assets/barrel.png"].tex = new Color[sq(TEXSIZE)];
-  load_image_to_buff("assets/barrel.png",SPRITES["assets/barrel.png"].tex,TEXSIZE,TEXSIZE);
+  SPRITES["assets/entity/crate.png"].tex = new Color[sq(TEXSIZE)];
+  load_image_to_buff("assets/entity/crate.png",SPRITES["assets/entity/crate.png"].tex,TEXSIZE,TEXSIZE);
 
   // an animated sprite
   SPRITES["assets/hourai.png"] = {0, "assets/hourai.png", 2, 250, 0};

@@ -20,9 +20,9 @@ unordered_map<string, Color*> TEXTURES;
 
 
 int Init_Tiles(void) {
-  Tile air = {1, "air"};
-  Tile blk = {0, "assets/redbrick.png"};
-  Tile wod = {0, "assets/wood.png"};
+  Tile air = {1, 0, 0, "air"};
+  Tile blk = {0, 0, 0, "bricks"};
+  Tile wod = {0, 0, 0, "concrete"};
   tiles[air.lookup_name] = air;
   tiles[blk.lookup_name] = blk;
   tiles[wod.lookup_name] = wod;
@@ -33,16 +33,16 @@ int Init_Tiles(void) {
 int Init_Gamemap(void) {
   // set everything to air idgaf
   for (int y = 0; y < MAPY; y++)
-    for (int x = 0; x < MAPX; x++) 
+    for (int x = 0; x < MAPX; x++)
       GAMEMAP[MAPX * y + x] = tiles["air"];
 
   for (int y = 0; y < MAPY; y++)
     for (int x = 0; x < MAPX; x++) {
       if (!y || !x || y == MAPY-1 || x == MAPX-1)
-        GAMEMAP[MAPX * y + x] = tiles["assets/redbrick.png"];
-        
+        GAMEMAP[MAPX * y + x] = tiles["concrete"];
+
       if ((x == 3 && y == 5) || (x == 2 && y == 5))
-        GAMEMAP[MAPX * y + x] = tiles["assets/wood.png"];
+        GAMEMAP[MAPX * y + x] = tiles["bricks"];
     }
 
   return 1;
@@ -87,25 +87,59 @@ int Init_Fogmap(void) {
 }
 
 int Init_Textures(void) {
-  // basically, read these values from a json instead of doing this manually
   // look in a specified mods folder too, so people can add their own textures
   // also, i should allow people to use their own lookup names
 
-  TEXTURES["assets/redbrick.png"] = new Color[sq(TEXSIZE)];
-  load_image_to_buff("assets/redbrick.png",TEXTURES["assets/redbrick.png"],TEXSIZE,TEXSIZE);
+  std::ifstream file("data/map_textures.json");
+  if (!file.is_open()) {
+    std::cerr<<"failed to open file: data/map_textures.json\n";
+    return 0;
+  }
 
-  TEXTURES["assets/wood.png"] = new Color[sq(TEXSIZE)];
-  load_image_to_buff("assets/wood.png",TEXTURES["assets/wood.png"],TEXSIZE,TEXSIZE);
+  if (!json::accept(file)) {
+    std::cerr<<"invalid json in: data/map_textures.json\n";
+    return 0;
+  }
 
-  TEXTURES["assets/colorstone.png"] = new Color[sq(TEXSIZE)];
-  load_image_to_buff("assets/colorstone.png",TEXTURES["assets/colorstone.png"],TEXSIZE,TEXSIZE);
+  file.seekg(0, std::ios::beg);
+
+  json base_textures = json::parse(file);
+  if (base_textures.is_discarded()) {
+    std::cerr << "failed to parse json file: data/map_textures/json\n";
+    return 0;
+  }
+  // std::cout<<"hi\n";
+
+  for (auto i = base_textures.begin(); i != base_textures.end(); i++) {
+    json& cur = i.value();
+    Tile t = {cur["is air"], cur["is decor"], cur["depth"],
+              cur["texture lookup name"], nullptr};
+
+    if (!t.is_air) {
+      TEXTURES[t.lookup_name] = new Color[sq(TEXSIZE)];
+      std::string p = cur["texture path"].get<std::string>();
+      load_image_to_buff(p.c_str(), TEXTURES[t.lookup_name], TEXSIZE, TEXSIZE);
+      t.texture = TEXTURES[t.lookup_name];
+    }
+
+    tiles[t.lookup_name] = t;
+  }
+
+  // TEXTURES["brick"] = new Color[sq(TEXSIZE)];
+  // load_image_to_buff("assets/texture/bricks.png",TEXTURES["brick"],TEXSIZE,TEXSIZE);
+
+  // TEXTURES["concrete"] = new Color[sq(TEXSIZE)];
+  // load_image_to_buff("assets/texture/concrete.png",TEXTURES["concrete"],TEXSIZE,TEXSIZE);
+
+  // TEXTURES["metal"] = new Color[sq(TEXSIZE)];
+  // load_image_to_buff("assets/texture/metal.png",TEXTURES["metal"],TEXSIZE,TEXSIZE);
 
   return 1;
 }
 
 int Init_Global_Textures(void) {
-  Init_Fogmap();
-  Init_Textures();
+  if (!Init_Fogmap()) return 0;
+  if (!Init_Textures()) return 0;
 
   return 1;
 }

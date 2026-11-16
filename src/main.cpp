@@ -22,7 +22,7 @@ int main(int argv, char** argc) {
   // Game.player->hand_attack_main(righthand);
 
   // images are to be loaded into the global texture buffer here
-  Init_Global_Textures();
+  if (!Init_Global_Textures()) return 0;
   Init_Global_Sprites();
   Init_Entities();
   Init_Map();

@@ -39,7 +39,7 @@ inline v2 normalise(v2 _mth_v) {
 inline int is_colliding(v2 _av, double _ar, v2 _bv, double _br) {
   /* double _dist2 = SQ(_av.x - _bv.x) + SQ(_av.y - _bv.y);
   double _rad_sum2 = SQ(_ar + _br);
-  
+
   return _dist2 <= _rad_sum2; */
   double _dx = _av.x - _bv.x;
   double _dy = _av.y - _bv.y;
