@@ -4,11 +4,11 @@
 unordered_map<string, i_sprite_texture> SPRITES;
 
 int Init_Sprites(void) {
-  // protections must be put in place when adding a new entry to SPRITES, so no
-  // existing sprites would be overwritten
-
   json base_textures = io::read_file("data/entity_textures.json");
-  if (base_textures == nullptr) return 0;
+  if (base_textures == nullptr) {
+    std::cerr<<"failed to read file/parse json: data/entity_textures.json\n";
+    return 0;
+  }
 
   for (auto i = base_textures.begin(); i != base_textures.end(); i++) {
     json& cur = i.value();
@@ -48,6 +48,9 @@ int Init_Sprites(void) {
                          OBJSIZE, OBJSIZE);
     }
   }
+
+  // here, read from a different file - the weapons file
+  // weapons contain textures for when the player equips them
 
   /*
   // testing adding weapon textures to the sprites texture structure

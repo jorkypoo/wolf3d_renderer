@@ -92,6 +92,11 @@ class Entity {
     double collision_radius;
     double interact_radius;
     unsigned id;
+
+    // or maybe make a derived class of entity: props
+    // just shit u can spawn around the map, like plants and barrels
+    // int decor;
+    // int enemy;
 };
 
 class Item_Drop : public Entity {

@@ -38,8 +38,8 @@ void Render(Game_Manager* Game) {
 
   // grab these from the level like:
   // Game->level/dungeon.get_floor_/ceiling_texture()
-  Color* floor_tex = TEXTURES["metal"];
-  Color*  ceil_tex = TEXTURES["metal"];
+  Color* floor_tex = TEXTURES["sandstone floor1"];
+  Color*  ceil_tex = TEXTURES["sandstone floor2"];
   // Color* tex_for_col = TEXTURES[tile_for_col.lookup_name];
 
   for(int y = 0; y < PIXELY; y++) {

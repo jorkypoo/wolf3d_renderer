@@ -7,12 +7,10 @@
 #include "entity.h"
 #include "entity_textures.h"
 
-
 char WINDOWNAME[] = "Wolf3D in C++";
 
 Player player(0.7);
 Game_Manager Game(&player);
-
 
 int main(int argv, char** argc) {
   if(!Game.Init(WINDOWNAME, WINDOWX, WINDOWY, PIXELX, PIXELY))

@@ -27,10 +27,13 @@ int Init_Gamemap(void) {
   for (int y = 0; y < MAPY; y++)
     for (int x = 0; x < MAPX; x++) {
       if (!y || !x || y == MAPY-1 || x == MAPX-1)
-        GAMEMAP[MAPX * y + x] = tiles["concrete"];
+        GAMEMAP[MAPX * y + x] = tiles["sandstone bricks"];
+
+      if ((x == 5 && y == 7) || (x == 4 && y == 7))
+        GAMEMAP[MAPX * y + x] = tiles["sandstone window"];
 
       if ((x == 3 && y == 5) || (x == 2 && y == 5))
-        GAMEMAP[MAPX * y + x] = tiles["bricks"];
+        GAMEMAP[MAPX * y + x] = tiles["sandstone big window"];
     }
 
   return 1;

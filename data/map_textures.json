@@ -15,6 +15,16 @@
       "is decor": 0,
       "depth": 1
    },
+   "patchy":
+   {
+      "texture lookup name": "patchy",
+      "texture path": "assets/texture/patchouli.png",
+      "is air": 0,
+      "is decor": 0,
+      "depth": 1,
+      "ceiling": 1,
+      "floor": 1
+   },
    "concrete":
    {
       "texture lookup name": "concrete",
@@ -65,7 +75,7 @@
    },
    "sandstone floor1":
    {
-      "texture lookup name": "sandstone floor 1",
+      "texture lookup name": "sandstone floor1",
       "texture path": "assets/texture/sandstone_floor1.png",
       "is air": 0,
       "is decor": 0,
@@ -75,7 +85,7 @@
    },
    "sandstone floor2":
    {
-      "texture lookup name": "sandstone floor 2",
+      "texture lookup name": "sandstone floor2",
       "texture path": "assets/texture/sandstone_floor2.png",
       "is air": 0,
       "is decor": 0,
