@@ -30,5 +30,57 @@
       "is air": 0,
       "is decor": 1,
       "depth": 1
+   },
+   "sandstone_bricks":
+   {
+      "texture lookup name": "sandstone bricks",
+      "texture path": "assets/texture/sandstone_brick.png",
+      "is air": 0,
+      "is decor": 0,
+      "depth": 1
+   },
+   "sandstone_door":
+   {
+      "texture lookup name": "sandstone door",
+      "texture path": "assets/texture/sandstone_door.png",
+      "is air": 0,
+      "is decor": 1,
+      "depth": 1
+   },
+   "sandstone_bigwindow":
+   {
+      "texture lookup name": "sandstone big window",
+      "texture path": "assets/texture/sandstone_bigwindow.png",
+      "is air": 0,
+      "is decor": 1,
+      "depth": 1
+   },
+   "sandstone window":
+   {
+      "texture lookup name": "sandstone window",
+      "texture path": "assets/texture/sandstone_window.png",
+      "is air": 0,
+      "is decor": 1,
+      "depth": 1
+   },
+   "sandstone floor1":
+   {
+      "texture lookup name": "sandstone floor 1",
+      "texture path": "assets/texture/sandstone_floor1.png",
+      "is air": 0,
+      "is decor": 0,
+      "depth": 1,
+      "floor": 1,
+      "ceiling": 1
+   },
+   "sandstone floor2":
+   {
+      "texture lookup name": "sandstone floor 2",
+      "texture path": "assets/texture/sandstone_floor2.png",
+      "is air": 0,
+      "is decor": 0,
+      "depth": 1,
+      "floor": 0,
+      "ceiling": 1
    }
 }

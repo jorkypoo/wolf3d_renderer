@@ -30,9 +30,11 @@ typedef enum {
 // what the map is made of
 typedef struct Tile Tile;
 struct Tile {
-  int is_air;              // basically always 1 except for my predefined air tile
-  int is_decor;            // used in random generation - spreads block out if decor
-  int depth;               // used in random generation - matches similar nums in a level together
+  int is_air;   // basically always 0 except for my predefined air tile - can be left out
+  int is_decor; // used in random generation - spreads block out if decor
+  int depth;    // used in random generation - matches similar nums in a level together
+  int floor;    // can the texture be used as a floor texture in a level
+  int ceiling;  // can the texture be used as a ceiling texture in a level
   std::string lookup_name; // the filepath, but acts as a lookup for the texture hash map
   Color* texture;
 };

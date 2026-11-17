@@ -82,34 +82,59 @@ int Init_Textures(void) {
 
   json base_textures = json::parse(file);
   if (base_textures.is_discarded()) {
-    std::cerr << "failed to parse json file: data/map_textures/json\n";
+    std::cerr << "failed to parse json file: data/map_textures.json\n";
     return 0;
   }
   // std::cout<<"hi\n";
 
   for (auto i = base_textures.begin(); i != base_textures.end(); i++) {
     json& cur = i.value();
-    Tile t = {cur["is air"], cur["is decor"], cur["depth"],
-              cur["texture lookup name"], nullptr};
+
+    int air = 0;
+    int decor = 0;
+    int depth = 0;
+    int floor = 0;
+    int ceil = 0;
+
+    // the following parameters for tiles can be left unset
+    if (!cur["is air"].empty()) air = cur["is air"];
+    if (!cur["is decor"].empty()) decor = cur["is decor"];
+    if (!cur["floor"].empty()) floor = cur["floor"];
+    if (!cur["ceiling"].empty()) ceil = cur["ceiling"];
+
+    // these 3 parameters MUST be set & will throw an error if left unset in the json
+    if (cur["depth"].empty()) {
+      std::cerr<<"please provide an integer depth value in data/map_textures.json\n";
+      return 0;
+    }
+
+    std::string tex_lookup;
+    std::string tex_path;
+
+    if (!cur["texture lookup name"].empty()) {
+      tex_lookup = cur["texture lookup name"];
+    } else {
+      std::cerr<<"texture lookup name not provided in data/map_textures.json\n";
+      return 0;
+    }
+
+    if (!cur["texture path"].empty()) {
+      tex_path = cur["texture path"];
+    } else {
+      std::cerr<<"texture path not provided in data/map_textures.json\n";
+      return 0;
+    }
+
+    Tile t = {air, decor, depth, floor, ceil, tex_lookup, nullptr};
 
     if (!t.is_air) {
       TEXTURES[t.lookup_name] = new Color[sq(TEXSIZE)];
-      std::string p = cur["texture path"].get<std::string>();
-      load_image_to_buff(p.c_str(), TEXTURES[t.lookup_name], TEXSIZE, TEXSIZE);
+      load_image_to_buff(tex_path.c_str(), TEXTURES[t.lookup_name], TEXSIZE, TEXSIZE);
       t.texture = TEXTURES[t.lookup_name];
     }
 
     tiles[t.lookup_name] = t;
   }
-
-  // TEXTURES["brick"] = new Color[sq(TEXSIZE)];
-  // load_image_to_buff("assets/texture/bricks.png",TEXTURES["brick"],TEXSIZE,TEXSIZE);
-
-  // TEXTURES["concrete"] = new Color[sq(TEXSIZE)];
-  // load_image_to_buff("assets/texture/concrete.png",TEXTURES["concrete"],TEXSIZE,TEXSIZE);
-
-  // TEXTURES["metal"] = new Color[sq(TEXSIZE)];
-  // load_image_to_buff("assets/texture/metal.png",TEXTURES["metal"],TEXSIZE,TEXSIZE);
 
   return 1;
 }
