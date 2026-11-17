@@ -1,5 +1,5 @@
 /*
- * header for drawing pixels to the screen - used in rendering 
+ * header for drawing pixels to the screen - used in rendering
  *
  */
 

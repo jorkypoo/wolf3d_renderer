@@ -11,9 +11,10 @@
 #include <string>
 #include <unordered_map>
 #include <list>
-using namespace std;
+#include <iostream> // error message outputting
 
 #include "image_load.h"
+#include "jsonio.h"
 #include "def.h"
 
 // textures are squares so...
@@ -22,7 +23,7 @@ using namespace std;
 typedef struct i_sprite_texture i_sprite_texture;
 struct i_sprite_texture {
   Color* tex;              // the texture itself
-  const char* lookup_name; // the name given to the texture - must be unique
+  std::string lookup_name; // the name given to the texture - must be unique
   unsigned num_frames;     // how many frames the texture is compromised of; 0 if it is a static tex)
   uint64 update_every;     // how often the sprite should update this texture
   int oneshot;             // is the sprite a one-shot animation?

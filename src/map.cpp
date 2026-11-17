@@ -66,26 +66,8 @@ int Init_Fogmap(void) {
 int Init_Textures(void) {
   // look in a specified mods folder too, so people can add their own textures
   // also, i should allow people to use their own lookup names
-
-  std::ifstream file("data/map_textures.json");
-  if (!file.is_open()) {
-    std::cerr<<"failed to open file: data/map_textures.json\n";
-    return 0;
-  }
-
-  if (!json::accept(file)) {
-    std::cerr<<"invalid json in: data/map_textures.json\n";
-    return 0;
-  }
-
-  file.seekg(0, std::ios::beg);
-
-  json base_textures = json::parse(file);
-  if (base_textures.is_discarded()) {
-    std::cerr << "failed to parse json file: data/map_textures.json\n";
-    return 0;
-  }
-  // std::cout<<"hi\n";
+  json base_textures = io::read_file("data/map_textures.json");
+  if (base_textures == nullptr) return 0;
 
   for (auto i = base_textures.begin(); i != base_textures.end(); i++) {
     json& cur = i.value();

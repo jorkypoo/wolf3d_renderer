@@ -11,12 +11,10 @@
 #include <string>
 #include <unordered_map>
 #include <iostream>
-#include <fstream>
 
 #include "image_load.h"
 #include "def.h"
-#include "thirdparty/json.hpp"
-using namespace nlohmann;
+#include "jsonio.h"
 
 #define FOGLEVELS  (64)
 // #define DARKLEVELS (32)

@@ -1,0 +1,44 @@
+{
+   "itemdrop":
+   {
+      "texture lookup name": "itemdrop",
+      "num frames": 1,
+      "update every": 0,
+      "oneshot": 0,
+      "textures":
+      [
+         "assets/itemdrop.png"
+      ]
+   },
+   "woodcrate1":
+   {
+      "texture lookup name": "woodcrate1",
+      "textures":
+      [
+         "assets/entity/crate.png"
+      ]
+   },
+   "yuki onna attack":
+   {
+      "texture lookup name": "yuki onna attack",
+      "num frames": 2,
+      "update every": 350,
+      "oneshot": 0,
+      "textures":
+      [
+         "assets/enemy/yuki1a.png",
+         "assets/enemy/yuki2a.png"
+      ]
+   },
+   "yuki onna idle":
+   {
+      "texture lookup name": "yuki onna idle",
+      "num frames": 1,
+      "update every": 0,
+      "oneshot": 0,
+      "textures":
+      [
+         "assets/enemy/yuki1a.png"
+      ]
+   }
+}

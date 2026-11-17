@@ -42,8 +42,8 @@ int Entity::set_for_removal(void) {
 
 int Init_Entities(void) {
   // Add_Entity("yuki-onna", "SPRITES lookup name - not file name", pos);
-  add_entity("json_path", "json_id", "assets/hourai.png", {3,3});
-  add_entity("json_path", "json_id", "assets/entity/crate.png", {5,5});
+  add_entity("json_path", "json_id", "yuki onna attack", {3,3});
+  add_entity("json_path", "json_id", "woodcrate1", {5,5});
 
   return 1;
 }
