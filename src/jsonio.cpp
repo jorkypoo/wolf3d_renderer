@@ -1,6 +1,6 @@
 #include "jsonio.h"
 
-json io::read_file(std::string path)
+json io::read_json_file(std::string path)
 {
   std::ifstream file(path);
   if (!file.is_open())

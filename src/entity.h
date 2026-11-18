@@ -20,6 +20,7 @@
 #include "param.h"
 #include "item.h"
 #include "entity_textures.h"
+#include "jsonio.h"
 
 class Sprite;
 class Entity;

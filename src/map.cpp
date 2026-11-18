@@ -69,7 +69,7 @@ int Init_Fogmap(void) {
 int Init_Textures(void) {
   // look in a specified mods folder too, so people can add their own textures
   // also, i should allow people to use their own lookup names
-  json base_textures = io::read_file("data/map_textures.json");
+  json base_textures = io::read_json_file("data/map_textures.json");
   if (base_textures == nullptr) return 0;
 
   for (auto i = base_textures.begin(); i != base_textures.end(); i++) {

@@ -5,8 +5,8 @@
 
 list<Entity*> ENTITIES;
 
+// idk if i'll ever use this lmao
 static unsigned _id_num = 1;
-
 
 Entity::Entity(std::string path, std::string id, Sprite* sp, v2 p, v2 d, double cr, double ir) {
   sprite = sp;
@@ -19,7 +19,12 @@ Entity::Entity(std::string path, std::string id, Sprite* sp, v2 p, v2 d, double 
   interact_radius = ir;
 
   // read json from the path to init the entity here
-  // butttt... i'll just hard code it
+  // kind of a big issue here - what happens if reading fails?
+  // the entity is just initialised with...basic params? meep
+  json entity_data = io::read_json_file(path);
+  if (entity_data == nullptr)
+    std::cerr<<"failed to init entity "<<path<<" - "<<id;
+
   Parameters param = Parameters(1,1,1,1,1,1,1,1);
   Defense defense = Defense();
   Damage damage = Damage();
@@ -86,9 +91,7 @@ int add_entity(std::string json_path, std::string json_id, std::string tex_looku
   Sprite* dest = new Sprite(t.tex, t.num_frames, t.update_every, t.oneshot);
 
   // look up the correct entity params and stuff to initialise w/ constructor
-  std::string entity_param_path = "example/path.json";
-  std::string entity_param_id   = "example_name";
-  Entity* e = new Entity(entity_param_path, entity_param_id, dest, p, {1,0}, 0.2, 0.5);
+  Entity* e = new Entity(json_path, json_id, dest, p, {1,0}, 0.2, 0.5);
   ENTITIES.push_back(e);
 
   return 1;

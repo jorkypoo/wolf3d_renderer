@@ -4,7 +4,7 @@
 unordered_map<string, i_sprite_texture> SPRITES;
 
 int Init_Sprites(void) {
-  json base_textures = io::read_file("data/entity_textures.json");
+  json base_textures = io::read_json_file("data/entity_textures.json");
   if (base_textures == nullptr) {
     std::cerr<<"failed to read file/parse json: data/entity_textures.json\n";
     return 0;

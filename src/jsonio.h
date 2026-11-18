@@ -8,7 +8,7 @@ using namespace nlohmann;
 
 namespace io {
 
-json read_file(std::string path);
+json read_json_file(std::string path);
 
 }
 
