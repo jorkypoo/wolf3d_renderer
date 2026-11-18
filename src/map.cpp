@@ -75,17 +75,23 @@ int Init_Textures(void) {
   for (auto i = base_textures.begin(); i != base_textures.end(); i++) {
     json& cur = i.value();
 
+    // default settings if the params were left out in the json file
     int air = 0;
     int decor = 0;
     int depth = 0;
     int floor = 0;
     int ceil = 0;
+    int htrans = 0;
+    int vtrans = 0;
 
     // the following parameters for tiles can be left unset
     if (!cur["is air"].empty()) air = cur["is air"];
     if (!cur["is decor"].empty()) decor = cur["is decor"];
     if (!cur["floor"].empty()) floor = cur["floor"];
     if (!cur["ceiling"].empty()) ceil = cur["ceiling"];
+    if (!cur["horz transition"].empty()) htrans = cur["horz transition"];
+    if (!cur["vert transition"].empty()) vtrans = cur["vert transition"];
+
 
     // these 3 parameters MUST be set & will throw an error if left unset in the json
     if (cur["depth"].empty()) {
@@ -110,7 +116,7 @@ int Init_Textures(void) {
       return 0;
     }
 
-    Tile t = {air, decor, depth, floor, ceil, tex_lookup, nullptr};
+    Tile t = {air, decor, depth, floor, ceil, htrans, vtrans, tex_lookup, nullptr};
 
     if (!t.is_air) {
       TEXTURES[t.lookup_name] = new Color[sq(TEXSIZE)];

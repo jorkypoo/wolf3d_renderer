@@ -55,7 +55,9 @@
       "texture path": "assets/texture/sandstone_door.png",
       "is air": 0,
       "is decor": 1,
-      "depth": 1
+      "depth": 1,
+      "horz transition": 1,
+      "vert transition": 0
    },
    "sandstone_bigwindow":
    {

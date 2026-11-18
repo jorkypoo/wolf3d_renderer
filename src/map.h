@@ -33,6 +33,8 @@ struct Tile {
   int depth;    // used in random generation - matches similar nums in a level together
   int floor;    // can the texture be used as a floor texture in a level
   int ceiling;  // can the texture be used as a ceiling texture in a level
+  int htrans;   // if the tile will be used to transport the player to a new level - horizontally
+  int vtrans;   // if the tile will be used to transport the player to a new level - vertically
   std::string lookup_name; // the filepath, but acts as a lookup for the texture hash map
   Color* texture;
 };
