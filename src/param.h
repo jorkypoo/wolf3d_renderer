@@ -15,6 +15,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <cstring> // strcmp
 #include <climits>
 #include <iostream>
 #include "def.h"
@@ -78,14 +79,12 @@ inline uint total_xp_rq(uint lvl) {
   return total;
 }
 
-
-
 class Damage {
   public:
     Damage(PhysicalDamages param1=nophys, uint dmg1=0, ElementalDamages param2=noelm, uint dmg2=0);
     ~Damage() = default;
 
-    uint get_slashdmg(); 
+    uint get_slashdmg();
     uint get_piercedmg();
     uint get_bluntdmg();
     uint get_lightningdmg();
@@ -110,7 +109,7 @@ class Damage {
     void set_profanedmg(uint a);
 
   private:
-    uint slash_dmg; 
+    uint slash_dmg;
     uint pierce_dmg;
     uint blunt_dmg;
     uint lightning_dmg;
@@ -130,8 +129,8 @@ class Defense {
             uint po=100, uint mg=100, uint nc=100,
             uint di=100, uint pr=100);
     ~Defense() = default;
-    
-    uint get_slashdef(); 
+
+    uint get_slashdef();
     uint get_piercedef();
     uint get_bluntdef();
     uint get_lightningdef();
@@ -143,7 +142,7 @@ class Defense {
     uint get_divinedef();
     uint get_profanedef();
 
-    void set_slashdef(uint a); 
+    void set_slashdef(uint a);
     void set_piercedef(uint a);
     void set_bluntdef(uint a);
     void set_lightningdef(uint a);
@@ -156,7 +155,7 @@ class Defense {
     void set_profanedef(uint a);
 
   private:
-    uint slash_def; 
+    uint slash_def;
     uint pierce_def;
     uint blunt_def;
     uint lightning_def;
@@ -210,13 +209,13 @@ class Parameters {
     void deplete_mp(uint amt);
     void deplete_stam(uint amt);
     void deplete_hunger(long double delta); // stamina depletes at a constant rate
-    
+
   private:
     // lazyyyy
     double hunger_accumulator;
     double stamina_accumulator;
     double mp_accumulator;
-    
+
   protected:
     // parameters
     uint vitality;
@@ -227,7 +226,7 @@ class Parameters {
     uint faith;
     uint charisma;
     uint luck;
-    
+
     // xp is awarded to a parameter for accomplishing a task
     // relating to said param - 100 to level up now
     uint vit_xp;
@@ -246,13 +245,13 @@ class Parameters {
     uint chr_disp;
     uint lck_xp;
     uint lck_disp;
-    
+
     // attributes - 0 is bad; max is good
     uint hp;      // current HP
     uint mp;      // current MP
     uint stamina; // current stamina
-    uint hunger;  // current hunger 
-    
+    uint hunger;  // current hunger
+
 };
 
 #endif

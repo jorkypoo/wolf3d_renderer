@@ -1,0 +1,37 @@
+{
+   "default":
+   {
+      "attack":
+      {
+         "physical damage": "slash",
+         "physical amount": 10,
+         "elemental damage": "none",
+         "elemental damage": 10
+      },
+      "defense":
+      {
+         "slash": 100,
+         "pierce": 100,
+         "blunt": 100,
+         "lightning": 100,
+         "fire": 100,
+         "frost": 100,
+         "poison": 100,
+         "magic": 100,
+         "nuclear": 100,
+         "divine": 100,
+         "profane": 100
+      },
+      "params":
+      {
+         "vitality": 1,
+         "willpower": 1,
+         "strength": 1,
+         "dexterity": 1,
+         "intelligence": 1,
+         "faith": 1,
+         "charisma": 1,
+         "luck": 1
+      }
+   }
+}

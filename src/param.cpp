@@ -19,6 +19,7 @@ inline int mult_will_overflow(unsigned int a, unsigned int b) {
   return a > UINT_MAX / b;
 }
 
+
 // ====================
 // ==== parameters ====
 // ====================
@@ -96,42 +97,42 @@ void Parameters::award_xp(Params param, uint xp) {
       vit_xp += xp * vit_disp;
       while (vit_xp >= total_xp_rq(vitality+1)) vitality++;
       break;
-      
+
     case str:
       str_xp += xp * str_disp;
       while (str_xp >= total_xp_rq(strength+1)) strength++;
       break;
-      
+
     case dex:
       dex_xp += xp * dex_disp;
       while (dex_xp >= total_xp_rq(dexterity+1)) dexterity++;
       break;
-      
+
     case wpwr:
       wpr_xp += xp * wpr_disp;
       while (wpr_xp >= total_xp_rq(willpower+1)) willpower++;
       break;
-      
+
     case inte:
       int_xp += xp * int_disp;
       while (int_xp >= total_xp_rq(intelligence+1)) intelligence++;
       break;
-      
+
     case fai:
       fai_xp += xp * fai_disp;
       while (fai_xp >= total_xp_rq(faith+1)) faith++;
       break;
-      
+
     case chr:
       chr_xp += xp * chr_disp;
       while (chr_xp >= total_xp_rq(charisma+1)) charisma++;
       break;
-      
+
     case lck:
       lck_xp += xp * lck_disp;
       while (lck_xp >= total_xp_rq(luck+1)) luck++;
       break;
-      
+
     default: break;
   }
 }
@@ -139,7 +140,7 @@ void Parameters::award_xp(Params param, uint xp) {
 
 uint Parameters::get_param_level(Params param) {
   switch (param) {
-    case vit:  return vitality; 
+    case vit:  return vitality;
     case str:  return strength;
     case dex:  return dexterity;
     case wpwr: return willpower;
@@ -245,7 +246,7 @@ Damage::Damage(PhysicalDamages param1, uint dmg1, ElementalDamages param2, uint 
     case pierce:    pierce_dmg = dmg1; break;
     case blunt:     blunt_dmg = dmg1; break;
   }
-  
+
   switch (param2) {
     case noelm:     break;
     case lightning: lightning_dmg = dmg1; break;
@@ -257,7 +258,7 @@ Damage::Damage(PhysicalDamages param1, uint dmg1, ElementalDamages param2, uint 
     case divine:    divine_dmg = dmg1; break;
     case profane:   profane_dmg = dmg1; break;
   }
-  
+
 }
 
 uint Damage::get_slashdmg() { return slash_dmg; }
@@ -288,7 +289,7 @@ void Damage::set_profanedmg(uint a) { profane_dmg = a; }
 // ==================
 
 Defense::Defense(uint sl,uint pe,uint bl,uint lt,uint fi,uint fo, uint po,uint mg,uint nc,uint di,uint pr)
-  {
+{
   slash_def = sl;
   pierce_def = pe;
   blunt_def = bl;

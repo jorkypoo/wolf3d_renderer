@@ -25,10 +25,42 @@
 class Sprite;
 class Entity;
 
+// maybe stupid, but i dont wanna store all the methods related to params
+// used to store entity's parameters in memory to avoid json lookups
+typedef struct i_entity_params i_entity_params;
+struct i_entity_params {
+  uint slash_def;
+  uint pierce_def;
+  uint blunt_def;
+  uint lightning_def;
+  uint fire_def;
+  uint frost_def;
+  uint poison_def;
+  uint magic_def;
+  uint nuclear_def;
+  uint divine_def;
+  uint profane_def;
+
+  PhysicalDamages pdmg;
+  uint pdmg_amt;
+  ElementalDamages edmg;
+  uint edmg_amt;
+
+  uint vitality;
+  uint willpower;
+  uint strength;
+  uint dexterity;
+  uint intelligence;
+  uint faith;
+  uint charisma;
+  uint luck;
+};
+
 // global linked list of all objects (static & scripted/animated)
 // entities ai scripts & timers updated in update() via this list
 // and their sprite rendered in render() too
 extern std::list<Entity*> ENTITIES;
+extern std::unordered_map<std::string, i_entity_params> ENTITY_PARAMETERS;
 
 int Init_Entities(void);
 void Free_Entities(void);
